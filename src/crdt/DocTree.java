@@ -155,8 +155,22 @@ public class DocTree implements ITree {
         return node;
     }
 
-    private void removeNode(INode node) {
-
+    public void removeNode(DocElement element) throws Exception {
+        if (element == null) {
+            throw  new IllegalArgumentException();
+        }
+        SearchResult res = searchNode(element.getPath());
+        INode node = res.node;
+        if (node != null) {
+            if (element.getValue() != node.getElement().getValue()) {
+                throw new Exception(String.format("Symbols in the received element '%s' and in the stored element '%s' don't match", element.getValue(), node.getElement().getValue()));
+            }
+            node.remove();
+        } else {
+            throw new Exception("There is a problem");
+            // ToDo: What to do if the node hasn't found?
+            // What if a delete message comes earlier than a create message?
+        }
     }
 
     @Override

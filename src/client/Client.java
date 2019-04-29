@@ -1,12 +1,15 @@
 package client;
 
 import crdt.*;
+import network.ICommunicationManager;
 import tests.CrdtTests;
 
 public class Client {
 
 	static Communication comm;
-	
+
+
+
     public Client() {
 
 //        guiObject.setBounds(0, 0, 700, 700);
@@ -14,24 +17,27 @@ public class Client {
 //        guiObject.setResizable(false);
 //        guiObject.setVisible(true);
 //        guiObject.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-      
-        Crdt data = new Crdt();
+
+        ICommunicationManager communicationManager = new ICommunicationManager() {
+            @Override
+            public void broadcastMessage(Operation o) {
+
+            }
+
+            @Override
+            public void handleIncomingMessage(IMessageHandler messageHandler) {
+                messageHandler.handle(null);
+            }
+        }; //ToDO: It is just a stub. Remove it after proper implementation. It shouldn't be in the client class.
+
+        Crdt data = new Crdt(communicationManager); //ToDo: It shouldn't be in the client. Move to main
         NotePadGUI.init(data);
-//        data.update(OperationType.insert, 'b', 1);
-//        data.update(OperationType.insert, 'c', 2);
-//        data.update(OperationType.insert, 'd', 100);
-//        data.update(OperationType.insert, 'a', 0);
-//
-//        data.update(OperationType.remove, 'a', 0);
-
-
-//        data.updateEditor();
 
 //        CrdtTests.testCrdtGetNodeByPath();
 //        CrdtTests.testCrdtGetNodeByPath_1();
-        CrdtTests.testCrdtAddNodeByPath();
-        CrdtTests.testCrdtAddNodeByPath_1();
-        CrdtTests.testCrdtAddNodeByPath_2();
+//        CrdtTests.testCrdtAddNodeByPath();
+//        CrdtTests.testCrdtAddNodeByPath_1();
+//        CrdtTests.testCrdtAddNodeByPath_2();
     }
     public void connectTo(String host, int port) {
     	comm = new Communication(host, port);
