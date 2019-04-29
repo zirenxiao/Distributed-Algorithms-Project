@@ -22,6 +22,7 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 
 import io.netty.util.concurrent.GlobalEventExecutor;
+import main.ConnectionInfo;
 import utils.Request;
 
 /**
@@ -34,6 +35,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(final ChannelHandlerContext ctx) {
     	channels.add(ctx.channel());
+    	ConnectionInfo.getInstance().addClientConnection(ctx.channel().remoteAddress().toString());
     	System.out.println("Channel active!");
 //        Request a = new Request();
 //        Request b = new Request();
@@ -50,6 +52,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) {
+    	ConnectionInfo.getInstance().delClientConnection(ctx.channel().remoteAddress().toString());
         cause.printStackTrace();
         ctx.close();
     }
