@@ -1,5 +1,6 @@
 package client;
 
+import crdt.Operation;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import main.Main;
@@ -15,8 +16,9 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 		// when receive a message from a server (parent)
 		// redirect to all other clients (children)
 		// and run the action
+		System.out.println("Received!");
 		Main.getServer().broadcastToClients(msg);
-		Main.getServer().receiveAction(msg);
+		Main.getCRDT().sync((Operation) msg);
     }
     
     @Override

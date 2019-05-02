@@ -1,5 +1,6 @@
 package server;
 
+import crdt.Operation;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -29,6 +30,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
     	// when received a message from a client, redirect
     	// to all other peers and run the message
+    	
+    	System.out.println("Received!");
     	for (Channel c: channels) {
     		// first send to all connected clients (children)
     		if (c != ctx.channel()) {
@@ -39,7 +42,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     	// then send to the server (parent)
     	Main.getClient().sentToServer(msg);
     	// run the action
-    	Main.getServer().receiveAction(msg);
+    	Main.getCRDT().sync((Operation) msg);
+    	
     }
 
     @Override

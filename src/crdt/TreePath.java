@@ -1,4 +1,5 @@
 package crdt;
+import java.io.Serializable;
 import java.util.BitSet;
 
 /*
@@ -19,8 +20,12 @@ import java.util.BitSet;
 *
 * */
 
-public class TreePath {
-    public BitSet path;
+public class TreePath implements Serializable{
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1637333504913968048L;
+	public BitSet path;
     int currentWritePosition;
     int currentReadPosition;
 
