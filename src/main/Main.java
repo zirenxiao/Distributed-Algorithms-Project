@@ -3,15 +3,16 @@ package main;
 import client.Client;
 import client.NotePadGUI;
 import crdt.Crdt;
-import crdt.IMessageHandler;
-import crdt.Operation;
 import network.ICommunicationManager;
+import network.NetworkManager;
 import server.Server;
+import tests.PathTests;
 
 public class Main {
 	private static Client client;
 	private static Server server;
-	
+	private static Crdt data;
+
 	public static void main(String[] args) {
 		processArgs(args);
 	}
@@ -38,33 +39,22 @@ public class Main {
 		// create a thread to run the server
 		server = new Server(selfPort);
 		server.start();
-				
+
+		client = new Client();
+
 
 		// initialize the Crdt (Model/Controller) and NotePadGUI (View)
 		init();
 	}
 
 	private static void init(){
-		ICommunicationManager communicationManager = new ICommunicationManager() {
-			IMessageHandler messageHandler = null;
-			@Override
-			public void broadcastMessage(Operation o) {
-
-			}
-
-			@Override
-			public void setIncomingMessageHandler(IMessageHandler messageHandler) {
-				this.messageHandler = messageHandler;
-
-				// Use it in you handler
-				// messageHandler.handle(null)
-			}
-		}; //ToDO: It is just a stub. Remove it after proper implementation.
-		Crdt data = new Crdt(communicationManager);
+        ICommunicationManager communicationManager = new NetworkManager();
+		data = new Crdt(communicationManager);
 		NotePadGUI.init(data);
+	}
 
-		client = new Client();
-		
+	public static Crdt getCRDT() {
+		return data;
 	}
 
 	public static Client getClient() {
