@@ -17,7 +17,7 @@ public class Crdt implements ICrdt {
         doc = new DocTree();
         this.comm = comm;
 
-        comm.handleIncomingMessage(new IMessageHandler() {
+        comm.setIncomingMessageHandler(new IMessageHandler() {
             @Override
             public void handle(Operation o) {
                 sync(o);

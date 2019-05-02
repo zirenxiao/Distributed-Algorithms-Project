@@ -46,14 +46,18 @@ public class Main {
 
 	private static void init(){
 		ICommunicationManager communicationManager = new ICommunicationManager() {
+			IMessageHandler messageHandler = null;
 			@Override
 			public void broadcastMessage(Operation o) {
 
 			}
 
 			@Override
-			public void handleIncomingMessage(IMessageHandler messageHandler) {
-				messageHandler.handle(null);
+			public void setIncomingMessageHandler(IMessageHandler messageHandler) {
+				this.messageHandler = messageHandler;
+
+				// Use it in you handler
+				// messageHandler.handle(null)
 			}
 		}; //ToDO: It is just a stub. Remove it after proper implementation.
 		Crdt data = new Crdt(communicationManager);
