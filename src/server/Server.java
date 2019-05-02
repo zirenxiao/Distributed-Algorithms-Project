@@ -32,11 +32,12 @@ public class Server extends Thread{
 		}
 	}
 	
-    public void broadcastToClients(Object obj) {
+    public void broadcastToClients(String str) {
+    	
     	ChannelGroup channels = ServerHandler.channels;
     	for (Channel c: channels) {
-    		c.writeAndFlush(obj);
-    		System.out.println("Flush!");
+//    		System.out.println("BTC:"+str);
+    		c.writeAndFlush(str);
     	}
     }
     
