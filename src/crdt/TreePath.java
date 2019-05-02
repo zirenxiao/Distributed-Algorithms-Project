@@ -1,4 +1,5 @@
 package crdt;
+import java.io.Serializable;
 import java.util.BitSet;
 
 /*
@@ -19,7 +20,7 @@ import java.util.BitSet;
 *
 * */
 
-public class TreePath {
+public class TreePath implements Serializable {
     public BitSet path;
     int currentWritePosition;
     int currentReadPosition;

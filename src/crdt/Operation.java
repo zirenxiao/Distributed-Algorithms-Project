@@ -1,6 +1,8 @@
 package crdt;
 
-public class Operation {
+import java.io.Serializable;
+
+public class Operation implements Serializable {
     private OperationType type;
     private DocElement element;
 
