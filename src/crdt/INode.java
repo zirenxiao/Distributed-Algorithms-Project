@@ -7,6 +7,8 @@ public interface INode {
     void setRightChild(INode node);
     void setParent(INode node);
     IElement getElement();
+    void setElement(IElement element);
     void remove();
     boolean isRemoved();
+    boolean isEmpty();
 }

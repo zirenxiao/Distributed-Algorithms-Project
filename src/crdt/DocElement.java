@@ -11,6 +11,7 @@ public class DocElement implements IElement, Serializable {
         this.symbol = symbol;
     }
 
+    @Override
     public void setPath(TreePath path) {
         this.path = path;
     }

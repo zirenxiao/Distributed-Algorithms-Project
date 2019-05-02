@@ -30,13 +30,16 @@ public class Server extends Thread{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println("Server Starts.");
 	}
 	
-    public static void broadcastToClients(Object obj) {
+    public void broadcastToClients(Object obj) {
     	ChannelGroup channels = ServerHandler.channels;
     	for (Channel c: channels) {
     		c.writeAndFlush(obj);
     	}
     }
+    
+    public void receiveAction(Object obj) {
+		
+	}
 }

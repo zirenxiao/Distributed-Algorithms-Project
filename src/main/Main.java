@@ -1,6 +1,11 @@
 package main;
 
 import client.Client;
+import client.NotePadGUI;
+import crdt.Crdt;
+import crdt.IMessageHandler;
+import crdt.Operation;
+import network.ICommunicationManager;
 import server.Server;
 
 public class Main {
@@ -8,8 +13,19 @@ public class Main {
 	private static Server server;
 	
 	public static void main(String[] args) {
-		establishConnections(8888);
-		
+		processArgs(args);
+	}
+	
+	private static void processArgs(String[] args) {
+		// args[0] = server port, default = 8888
+		int port;
+		if (args.length==0) {
+			port = 8888;
+		}else {
+			port = Integer.parseInt(args[0]);
+		}
+		System.err.println("Server starts at port " + port);
+		establishConnections(port);
 	}
 	
 	/**
@@ -25,7 +41,26 @@ public class Main {
 		server = new Server(selfPort);
 		server.start();
 				
-		// run client
+
+		// initialize the Crdt (Model/Controller) and NotePadGUI (View)
+		init();
+	}
+
+	private static void init(){
+		ICommunicationManager communicationManager = new ICommunicationManager() {
+			@Override
+			public void broadcastMessage(Operation o) {
+
+			}
+
+			@Override
+			public void handleIncomingMessage(IMessageHandler messageHandler) {
+				messageHandler.handle(null);
+			}
+		}; //ToDO: It is just a stub. Remove it after proper implementation.
+		Crdt data = new Crdt(communicationManager);
+		NotePadGUI.init(data);
+
 		client = new Client();
 		
 	}

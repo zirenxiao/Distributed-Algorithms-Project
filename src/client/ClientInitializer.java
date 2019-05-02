@@ -7,8 +7,6 @@ import javax.net.ssl.SSLException;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.handler.codec.DelimiterBasedFrameDecoder;
-import io.netty.handler.codec.Delimiters;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import utils.Decoder;
@@ -31,7 +29,7 @@ public class ClientInitializer extends ChannelInitializer<SocketChannel> {
     @Override
     public void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
-        pipeline.addLast(sslCtx.newHandler(ch.alloc(), Communication.host, Communication.port));
+        pipeline.addLast(sslCtx.newHandler(ch.alloc(), Communication.getHost(), Communication.getPort()));
 //        pipeline.addLast(new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
         pipeline.addLast(new Decoder());
         pipeline.addLast(new Encoder());

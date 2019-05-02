@@ -81,7 +81,7 @@ public class Crdt implements ICrdt {
 
     @Override
     public void uploadDoc(ArrayList<INode> doc) {
-
+        // ToDo: upload whole doc if client connects when other have been working already
     }
 
     @Override

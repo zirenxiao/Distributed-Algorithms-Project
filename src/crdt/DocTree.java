@@ -13,48 +13,58 @@ class P {
     }
 }
 
-class SearchResult {
-    INode node;
-    INode parent;
-    Direction direction;
-}
 
 public class DocTree implements ITree {
     DocNode root;
 
 
     public INode addNode(DocElement element) throws Exception {
-        SearchResult res = searchNode(element.getPath());
-        if (res.node == null) {
-            return createNode(element, res.parent, res.direction);
+        INode node = searchNode(element.getPath());
+        if (node.isEmpty()) {
+            node.setElement(element);
+            return node;
         } else {
-            throw new Exception("There is a conflict");
-            //ToDo: solveConflict();
+            if (node.isRemoved()) {
+                if (element.getValue() != node.getElement().getValue()) {
+                    throw new Exception(String.format("Symbols in the received element '%s' and in the stored element '%s' don't match", element.getValue(), node.getElement().getValue()));
+                } else {
+                    System.out.println("Received an element which was removed earlier");
+                }
+                return null;
+            } else {
+                throw new Exception("There is a conflict");
+                //ToDo: solveConflict();
+            }
         }
     }
 
-    private SearchResult searchNode(TreePath path) throws Exception {
+    private INode searchNode(TreePath path) throws Exception {
         if (path == null) {
             throw new IllegalArgumentException();
         }
 
-        SearchResult res = new SearchResult();
-        res.node = root;
+        INode node = root;
+        INode parent = null;
+        Direction direction = null;
         Direction d = path.getNextStep();
         while (d != null) {
-            if (res.node == null) {
-                throw new Exception("Path can't be reached");
+            if (node == null) {
+                node = createNode(null, parent, direction);
             }
-            res.direction = d;
-            res.parent = res.node;
+            direction = d;
+            parent = node;
             if (d == Direction.right) {
-                res.node = res.node.getRightChild();
+                node = node.getRightChild();
             } else if (d == Direction.left) {
-                res.node = res.node.getLeftChild();
+                node = node.getLeftChild();
             }
             d = path.getNextStep();
         }
-        return res;
+
+        if (node == null) {
+            node = createNode(null, parent, direction);
+        }
+        return node;
     }
 
     private INode createNode(DocElement element, INode parent, Direction direction) {
@@ -70,7 +80,7 @@ public class DocTree implements ITree {
     }
 
     public INode getNode(TreePath path) throws Exception {
-        return searchNode(path).node;
+        return searchNode(path);
     }
 
     private ArrayList<INode> traverseTreeUntilPosition(int position) {
@@ -93,7 +103,7 @@ public class DocTree implements ITree {
             if (positions.current == positions.stop) {
                 return true;
             }
-            if (!root.isRemoved()) {
+            if (!root.isRemoved() && !root.isEmpty()) {
                 result.add(root);
                 positions.current++;
             }
@@ -159,17 +169,16 @@ public class DocTree implements ITree {
         if (element == null) {
             throw  new IllegalArgumentException();
         }
-        SearchResult res = searchNode(element.getPath());
-        INode node = res.node;
-        if (node != null) {
+        INode node = searchNode(element.getPath());
+        if (!node.isEmpty()) {
             if (element.getValue() != node.getElement().getValue()) {
                 throw new Exception(String.format("Symbols in the received element '%s' and in the stored element '%s' don't match", element.getValue(), node.getElement().getValue()));
             }
             node.remove();
         } else {
-            throw new Exception("There is a problem");
-            // ToDo: What to do if the node hasn't found?
-            // What if a delete message comes earlier than a create message?
+            node.setElement(element);
+            node.remove();
+            System.out.println("Removed an element which hasn't been added yet");
         }
     }
 

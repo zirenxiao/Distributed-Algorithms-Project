@@ -39,6 +39,7 @@ public class NotePadGUI extends javax.swing.JFrame {
     private String fileName;
     private Clipboard clipBoard = getToolkit().getSystemClipboard();
     private static Crdt data;
+    private static boolean isFromOthers = false;
 
     private NotePadGUI() {
         initComponents();
@@ -87,6 +88,9 @@ public class NotePadGUI extends javax.swing.JFrame {
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
+                if(isFromOthers){
+                    return;
+                }
                 try {
                     String insertedText = e.getDocument().getText(e.getOffset(),e.getLength());
                     System.out.println("inserting "+insertedText+" from "+e.getOffset());
@@ -98,6 +102,9 @@ public class NotePadGUI extends javax.swing.JFrame {
 
             @Override
             public void removeUpdate(DocumentEvent e) {
+                if(isFromOthers){
+                    return;
+                }
                 String removedText = previousText.substring(e.getOffset(), e.getOffset() + e.getLength());
                 System.out.println("removing "+removedText+" from "+e.getOffset());
                 multipleDelete(removedText,e.getOffset()+1);
@@ -292,7 +299,9 @@ public class NotePadGUI extends javax.swing.JFrame {
      * @param str
      */
     public static void updateEditor(String str){
+        isFromOthers = true;
         textArea.setText(str);
+        isFromOthers = false;
     }
 
     /**

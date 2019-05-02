@@ -6,13 +6,13 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import main.ConnectionInfo;
-import utils.Settings;
 
 public class Communication {
-	static String host;// = System.getProperty("host", Settings.SERVER_ADDRESS);
-    static int port;// = Integer.parseInt(System.getProperty("port", Settings.OUT_PORT));
-	static EventLoopGroup group = new NioEventLoopGroup();
+	private static String host;// = System.getProperty("host", Settings.SERVER_ADDRESS);
+    private static int port;// = Integer.parseInt(System.getProperty("port", Settings.OUT_PORT));
+    private static EventLoopGroup group = new NioEventLoopGroup();
 	private Channel ch;
+	private boolean isConnected = false;
 	public Communication(String host, int port) {
 		Communication.host = host;
 		Communication.port = port;
@@ -25,14 +25,40 @@ public class Communication {
             ch = b.connect(Communication.host, Communication.port).sync().channel();
             ConnectionInfo.getInstance().setConnectEnable(false);
             ConnectionInfo.getInstance().setConnectStatus("Connected");
+            isConnected = true;
+            
         } catch (Exception e) {
-        	ConnectionInfo.getInstance().setConnectStatus("Conncetion Failed");
-        	ConnectionInfo.getInstance().setConnectEnable(true);
+        	disconnect("Conncetion Failed");
         }finally {
             // The connection is closed automatically on shutdown.
 //            group.shutdownGracefully();
         }
 	}
+	
+	private void disconnect(String msg) {
+		ConnectionInfo.getInstance().setConnectStatus(msg);
+    	ConnectionInfo.getInstance().setConnectEnable(true);
+    	isConnected = false;
+    	group.shutdownGracefully();
+    	group = new NioEventLoopGroup();
+	}
+	
+	public static String getHost() {
+		return host;
+	}
+
+
+
+	public static int getPort() {
+		return port;
+	}
+
+
+
+	public boolean isConnected() {
+		return isConnected;
+	}
+
 	public Channel getChannel() {
 		return ch;
 	}

@@ -61,11 +61,7 @@ public class CrdtTests {
             e.printStackTrace();
         }
         System.out.println("Should be: null");
-        if (node == null) {
-            System.out.println("Actual value: null");
-        } else {
-            System.out.println(String.format("Actual value: %s", node.getElement().getValue()));
-        }
+        System.out.println(String.format("Actual value: %s", node.getElement().getValue()));
     }
 
     public static  void testCrdtAddNodeByPath() {
@@ -105,15 +101,15 @@ public class CrdtTests {
         path1.addStep(Direction.right);
         el1.setPath(path1);
 
-        System.out.println("Should be: Error. Path can't be reached");
+        System.out.println("Should be: ab");
 
         try {
             doc.addNode(el);
             doc.addNode(el1);
         } catch (Exception e) {
             System.out.println(String.format("Actual value: %s", e.getMessage()));
-//            e.printStackTrace();
         }
+        System.out.println(String.format("Actual value: %s", doc.toString()));
     }
 
     public static  void testCrdtAddNodeByPath_2() {
@@ -140,6 +136,58 @@ public class CrdtTests {
         } catch (Exception e) {
             System.out.println(String.format("Actual value: %s", e.getMessage()));
         }
+    }
+
+    public static  void testCrdtRemoteDelete() {
+        System.out.println("Test DocTree.removeNode(DocElement)");
+        DocTree doc = new DocTree();
+
+        DocElement el = new DocElement('a');
+        TreePath path = new TreePath();
+        el.setPath(path);
+
+        DocElement el1 = new DocElement('b');
+        TreePath path1 = new TreePath();
+        path1.addStep(Direction.right);
+        el1.setPath(path1);
+
+
+        System.out.println("Should be: a");
+        try {
+            doc.addNode(el);
+            doc.addNode(el1);
+            doc.removeNode(el1);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println(String.format("Actual value: %s", doc.toString()));
+
+    }
+
+    public static  void testCrdtRemoteDeleteAdd() {
+        System.out.println("Test DocTree.removeNode(DocElement) before addNode()");
+        DocTree doc = new DocTree();
+
+        DocElement el = new DocElement('b');
+        TreePath path = new TreePath();
+        el.setPath(path);
+
+        DocElement el1 = new DocElement('c');
+        TreePath path1 = new TreePath();
+        path1.addStep(Direction.right);
+        el1.setPath(path1);
+
+
+        System.out.println("Should be: b");
+        try {
+            doc.addNode(el);
+            doc.removeNode(el1);
+            doc.addNode(el1);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        System.out.println(String.format("Actual value: %s", doc.toString()));
+
     }
 
 }
