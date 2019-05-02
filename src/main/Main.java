@@ -30,8 +30,6 @@ public class Main {
 	
 	/**
 	 * @param selfPort A port to allow connections from other clients
-	 * @param serverAddress Connect to a server via this address
-	 * @param serverPort Connect to a server via this port
 	 */
 	private static void establishConnections(int selfPort) {
 		// show connection info
