@@ -36,6 +36,7 @@ public class Server extends Thread{
     	ChannelGroup channels = ServerHandler.channels;
     	for (Channel c: channels) {
     		c.writeAndFlush(obj);
+    		System.out.println("Flush!");
     	}
     }
     

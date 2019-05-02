@@ -1,5 +1,6 @@
 package server;
 
+import crdt.Operation;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -39,7 +40,8 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     	// then send to the server (parent)
     	Main.getClient().sentToServer(msg);
     	// run the action
-    	Main.getServer().receiveAction(msg);
+    	Main.getCRDT().sync((Operation) msg);
+    	
     }
 
     @Override

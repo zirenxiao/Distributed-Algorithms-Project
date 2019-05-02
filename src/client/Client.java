@@ -7,7 +7,7 @@ import tests.CrdtTests;
 public class Client {
 
 
-	private Communication comm;
+	private Communication comm = null;
 	
     public Client() {
 
@@ -37,6 +37,10 @@ public class Client {
     }
     
 	public void sentToServer(Object obj) {
+		if (comm == null) {
+			return;
+		}
+		
 		if (comm.isConnected()) {
 			comm.getChannel().writeAndFlush(obj);
 		}
