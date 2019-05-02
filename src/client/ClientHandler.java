@@ -16,7 +16,6 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 		// when receive a message from a server (parent)
 		// redirect to all other clients (children)
 		// and run the action
-		System.out.println("Received!");
 		Main.getServer().broadcastToClients(msg);
 		Main.getCRDT().sync((Operation) msg);
     }

@@ -30,8 +30,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
     	// when received a message from a client, redirect
     	// to all other peers and run the message
-    	
-    	System.out.println("Received!");
     	for (Channel c: channels) {
     		// first send to all connected clients (children)
     		if (c != ctx.channel()) {
