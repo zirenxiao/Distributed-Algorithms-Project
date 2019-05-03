@@ -66,6 +66,8 @@ public class ConnectionInfo extends JFrame{
 	private void connectToServer() {
 		JTextField address = new JTextField(10);
 		JTextField port = new JTextField(5);
+		address.setText("127.0.0.1");
+		port.setText("888");
 		connect = new JButton("Connect");
 		JPanel connectToServer = new JPanel();
 		JPanel mannualConnect = new JPanel();

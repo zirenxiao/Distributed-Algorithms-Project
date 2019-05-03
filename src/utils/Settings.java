@@ -1,17 +1,17 @@
 package utils;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+
+import java.io.*;
+import java.util.Base64;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import crdt.DocElement;
+import crdt.Operation;
+import crdt.OperationType;
+import crdt.TreePath;
 
 
 public class Settings {
@@ -32,52 +32,73 @@ public class Settings {
 			content = (JSONObject) parser.parse(msg);
 			return content;
 		} catch (ParseException e) {
-			
+			System.err.println(e);
 		} catch (ClassCastException exc) {
-			
+			System.err.println(exc);
 		}
 		return null;
     }
 	
-	public static byte[] encodes(Object obj) throws IOException {
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		ObjectOutputStream oos = new ObjectOutputStream(out);
-		oos.writeObject(obj);
-		oos.flush();
-		oos.close();
-		byte[] bytes = out.toByteArray();
-		return bytes;
+	@SuppressWarnings("unchecked")
+	public static String operationToString(Operation o) {
+		JSONObject content;
+		content = new JSONObject();
+		content.put("type", o.getType().toString());
+		content.put("symbol", Character.toString(o.getElement().getValue()));
+		content.put("path", toString(o.getElement().getPath()));
+//		System.out.println(content.toJSONString());
+//		System.out.println(stringToJson(content.toJSONString()));
+		return content.toJSONString();
 	}
- 
-	public static Object decode(byte[] bytes) throws IOException, ClassNotFoundException {
-		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
-		ObjectInputStream inn = new ObjectInputStream(in);
-		Object obj = inn.readObject();
-		return obj;
+	
+	public static Operation jsonToOperation(JSONObject o) {
+//		System.out.println(o.toJSONString());
+		DocElement e = new DocElement(o.get("symbol").toString().charAt(0));
+		Operation op = new Operation(OperationType.valueOf(o.get("type").toString()), e);
+		op.getElement().setPath((TreePath) fromString(o.get("path").toString()));
+//		System.out.println(op.getElement().getValue());
+//		System.out.println(op.getElement().getPath().length());
+		return op;
 	}
- 
-	/**
-	 * byte to buf
-	 * 
-	 * @param bytes
-	 * @return
-	 */
-	public ByteBuf getBufFromByte(byte[] bytes) {
-		ByteBuf buf = Unpooled.copiedBuffer(bytes);
-		return buf;
+	
+	private static Object fromString(String s){
+		byte [] data = Base64.getDecoder().decode(s);
+		ObjectInputStream ois;
+		try {
+			ois = new ObjectInputStream(new ByteArrayInputStream(data));
+			Object o  = ois.readObject();
+			ois.close();
+			return o;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
 	}
- 
-	/**
-	 * buf to byte
-	 * 
-	 * @param buf
-	 * @return
-	 */
-	public static byte[] getByteFromBuf(ByteBuf buf) {
-		int size = buf.readableBytes();
-		byte[] bytes = new byte[size];
-		buf.readBytes(bytes);
-		return bytes;
+	
+	/** Write the object to a Base64 string. */
+	private static String toString( Serializable o ){
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ObjectOutputStream oos;
+		try {
+			oos = new ObjectOutputStream(baos);
+			oos.writeObject(o);
+			oos.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return Base64.getEncoder().encodeToString(baos.toByteArray()); 
+	}
+	
+	public static Operation stringToOperation(String str) {
+		JSONObject jo = stringToJson(str);
+		return jsonToOperation(jo);
 	}
 
 }

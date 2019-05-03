@@ -36,13 +36,14 @@ public class Client {
     	comm = new Communication(host, Integer.parseInt(port));
     }
     
-	public void sentToServer(Object obj) {
+	public void sentToServer(String str) {
 		if (comm == null) {
 			return;
 		}
 		
 		if (comm.isConnected()) {
-			comm.getChannel().writeAndFlush(obj);
+//			System.out.println("STS:"+str);
+			comm.getChannel().writeAndFlush(str);
 		}
 	}
 	
