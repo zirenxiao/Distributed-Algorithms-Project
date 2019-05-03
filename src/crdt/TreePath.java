@@ -2,28 +2,8 @@ package crdt;
 import java.io.Serializable;
 import java.util.BitSet;
 
-/*
-*        TreePath path = new TreePath();
-*        path.addStep(Direction.left);
-*        path.addStep(Direction.right);
-*        path.addStep(Direction.right);
-*        path.addStep(Direction.left);
-*        path.addStep(Direction.left);
-*
-*        System.out.println(path.length());
-*
-*        Direction s = path.getNextStep();
-*        while (s != null) {
-*            System.out.println(s);
-*            s = path.getNextStep();
-*        }
-*
-* */
-
 public class TreePath implements Serializable{
-    /**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1637333504913968048L;
 	public BitSet path;
     int currentWritePosition;
@@ -65,6 +45,21 @@ public class TreePath implements Serializable{
 
     public int length() {
         return currentWritePosition;
+    }
+
+    public String toString() {
+        StringBuilder str = new StringBuilder();
+        for (int i = 0; i < length(); i++) {
+            boolean step = path.get(i);
+            if (step) {
+                str.append(Direction.right);
+                str.append(" ");
+            } else {
+                str.append(Direction.left);
+                str.append(" ");
+            }
+        }
+        return str.toString();
     }
 
 }

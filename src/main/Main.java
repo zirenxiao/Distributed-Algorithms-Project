@@ -7,13 +7,14 @@ import network.ICommunicationManager;
 import network.MessageQueue;
 import network.NetworkManager;
 import server.Server;
+import tests.PathTests;
 
 public class Main {
 	private static Client client;
 	private static Server server;
 	private static Crdt data;
 	private static MessageQueue mq;
-	
+
 	public static void main(String[] args) {
 		processArgs(args);
 	}
@@ -40,23 +41,22 @@ public class Main {
 		// create a thread to run the server
 		server = new Server(selfPort);
 		server.start();
-		
+
 		client = new Client();
-		
+
 		mq = new MessageQueue();
-		
-				
+
 
 		// initialize the Crdt (Model/Controller) and NotePadGUI (View)
 		init();
 	}
 
 	private static void init(){
-		ICommunicationManager communicationManager = new NetworkManager();
+        ICommunicationManager communicationManager = new NetworkManager();
 		data = new Crdt(communicationManager);
 		NotePadGUI.init(data);
 	}
-	
+
 	public static Crdt getCRDT() {
 		return data;
 	}

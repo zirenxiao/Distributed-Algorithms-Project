@@ -38,9 +38,12 @@ public class DocTree implements ITree {
         }
     }
 
-    private INode searchNode(TreePath path) throws Exception {
+    private INode searchNode(TreePath path) {
         if (path == null) {
-            throw new IllegalArgumentException();
+            if (root == null) {
+                return createNode(null, null, null);
+            }
+            return root;
         }
 
         INode node = root;
@@ -74,7 +77,7 @@ public class DocTree implements ITree {
         } else if (direction == Direction.right) {
             parent.setRightChild(node);
         } else if (direction == Direction.left) {
-            parent.setRightChild(node);
+            parent.setLeftChild(node);
         }
         return node;
     }

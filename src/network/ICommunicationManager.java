@@ -5,5 +5,5 @@ import crdt.Operation;
 
 public interface ICommunicationManager {
     void broadcastMessage(Operation operation);
-    void handleIncomingMessage(IMessageHandler messageHandler);
+    void setIncomingMessageHandler(IMessageHandler messageHandler);
 }

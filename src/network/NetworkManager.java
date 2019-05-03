@@ -12,7 +12,8 @@ import utils.Settings;
  * @author zirenxiao
  *
  */
-public class NetworkManager implements ICommunicationManager{
+public class NetworkManager implements ICommunicationManager {
+	IMessageHandler messageHandler;
 
 	@Override
 	public void broadcastMessage(Operation operation) {
@@ -25,9 +26,8 @@ public class NetworkManager implements ICommunicationManager{
 	}
 
 	@Override
-	public void handleIncomingMessage(IMessageHandler messageHandler) {
-		// TODO Auto-generated method stub
-
+	public void setIncomingMessageHandler(IMessageHandler messageHandler) {
+		this.messageHandler = messageHandler;
 	}
 
 }
