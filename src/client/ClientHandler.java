@@ -45,7 +45,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<String> {
 		Operation op = Settings.stringToOperation(msg);
 				
 		Main.getServer().broadcastToClients(msg);
-		Main.getCRDT().sync(op);
+		Main.getMessageQueue().add(op);
 	}
 
     

@@ -4,6 +4,7 @@ import client.Client;
 import client.NotePadGUI;
 import crdt.Crdt;
 import network.ICommunicationManager;
+import network.MessageQueue;
 import network.NetworkManager;
 import server.Server;
 
@@ -11,6 +12,7 @@ public class Main {
 	private static Client client;
 	private static Server server;
 	private static Crdt data;
+	private static MessageQueue mq;
 	
 	public static void main(String[] args) {
 		processArgs(args);
@@ -40,6 +42,9 @@ public class Main {
 		server.start();
 		
 		client = new Client();
+		
+		mq = new MessageQueue();
+		
 				
 
 		// initialize the Crdt (Model/Controller) and NotePadGUI (View)
@@ -63,5 +68,10 @@ public class Main {
 	public static Server getServer() {
 		return server;
 	}
+
+	public static MessageQueue getMessageQueue() {
+		return mq;
+	}
+	
 
 }

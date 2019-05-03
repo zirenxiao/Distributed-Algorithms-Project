@@ -57,6 +57,6 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
     	// then send to the server (parent)
     	Main.getClient().sentToServer(msg);
     	// run the action
-    	Main.getCRDT().sync(op);
+    	Main.getMessageQueue().add(op);
 	}
 }
