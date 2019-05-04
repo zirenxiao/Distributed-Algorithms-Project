@@ -4,19 +4,22 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-import javax.swing.event.AncestorListener;
 import javax.swing.table.DefaultTableModel;
 
-public class ConnectionInfo extends JFrame{
+public class ConnectionInfo extends JDialog{
 	
 	private static final long serialVersionUID = 1891198530883212402L;
 	private static ConnectionInfo ci = null;
@@ -26,6 +29,8 @@ public class ConnectionInfo extends JFrame{
 	private DefaultTableModel availableConnection;
 	private JLabel connectStatus;
 	private JButton connect;
+	private JTextField serverAddress;
+	private JTextField serverPort;
 
 	public ConnectionInfo() {
 		mainPanel = setupMainPanel();
@@ -47,7 +52,7 @@ public class ConnectionInfo extends JFrame{
 		setTitle("Connection Infomation");
         setVisible(true);
         setSize(500, 350);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+//        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 	
 	private JPanel setupMainPanel() {
@@ -67,28 +72,27 @@ public class ConnectionInfo extends JFrame{
 	}
 	
 	private void connectToServer() {
-		JTextField address = new JTextField(10);
-		JTextField port = new JTextField(5);
-		address.setText("127.0.0.1");
-		port.setText("888");
+		serverAddress = new JTextField(10);
+		serverPort = new JTextField(5);
+		serverAddress.setText("127.0.0.1");
+		serverPort.setText("888");
 		connect = new JButton("Connect");
 		JPanel connectToServer = new JPanel();
 		JPanel mannualConnect = new JPanel();
 		mannualConnect.setLayout(new GridLayout(4,1));
 		connectToServer.setLayout(new GridLayout(1,2));
 		mannualConnect.add(new JLabel("Address"));
-		mannualConnect.add(address);
+		mannualConnect.add(serverAddress);
 		mannualConnect.add(new JLabel("Port"));
-		mannualConnect.add(port);
+		mannualConnect.add(serverPort);
 		mannualConnect.add(connect);
 		connect.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Main.getClient().connectTo(address.getText(), port.getText());
+				connectTo(serverAddress.getText(), serverPort.getText());
 			}
         });
-		connectStatus = new JLabel("Not Connected");
-		mannualConnect.add(connectStatus);
+		
 		connectToServer.add(mannualConnect);
 		
 		JPanel serverStatus = new JPanel();
@@ -101,8 +105,34 @@ public class ConnectionInfo extends JFrame{
         });
 		serverStatus.add(new JLabel("Server Port: "+System.getProperty("port")));
 		serverStatus.add(resetServerTable);
+		connectStatus = new JLabel("Not Connected");
+		serverStatus.add(connectStatus);
 		connectToServer.add(serverStatus);
 		mainPanel.add(connectToServer);
+	}
+	
+	private void connectTo(String address, String port) {
+		// avoid connect to self
+		if (getSelfAddress().contains(address)) {
+			if (port.equals(System.getProperty("port"))) {
+				setConnectionStatus("Cannot connect to self");
+				return;
+			}
+		}
+		Main.getClient().connectTo(address, port);
+	}
+	
+	private ArrayList<String> getSelfAddress(){
+		ArrayList<String> list = new ArrayList<String>();
+		list.add("127.0.0.1");
+		list.add("localhost");
+		try {
+			list.add(InetAddress.getLocalHost().getHostAddress());
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
 	}
 	
 	private void availableConnectionTable() {
@@ -110,6 +140,42 @@ public class ConnectionInfo extends JFrame{
 		infoPanel.setLayout(new GridLayout(1,1));
 		availableConnection = new DefaultTableModel(new String[] {"Available Server", "Port"}, 0);
 		JTable serverOutput = new JTable(availableConnection);
+		serverOutput.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				int row=serverOutput.rowAtPoint(e.getPoint());
+//				int col= serverOutput.columnAtPoint(e.getPoint());
+				serverAddress.setText(serverOutput.getValueAt(row, 0).toString());
+				serverPort.setText(serverOutput.getValueAt(row, 1).toString());
+				
+			}
+		});
 		
 		JScrollPane scrollPane = new JScrollPane(serverOutput);
 		infoPanel.add(scrollPane,BorderLayout.CENTER);

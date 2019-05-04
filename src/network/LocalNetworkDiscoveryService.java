@@ -8,7 +8,7 @@ import main.ConnectionInfo;
 public class LocalNetworkDiscoveryService extends Thread {
 	 
     private DatagramSocket socket;
-    private byte[] buf = new byte[256];
+    private byte[] buf = new byte[50];
  
     public LocalNetworkDiscoveryService() {
         try {
