@@ -13,7 +13,14 @@ import utils.Settings;
  *
  */
 public class NetworkManager implements ICommunicationManager {
-	IMessageHandler messageHandler;
+	private IMessageHandler messageHandler = null;
+	private IMessageHandler serverInitHandler = null;
+	private IMessageHandler clientInitHandler = null;
+	private MessageQueue mq;
+
+	public NetworkManager() {
+		mq = new MessageQueue();
+	}
 
 	@Override
 	public void broadcastMessage(Operation operation) {
@@ -28,6 +35,33 @@ public class NetworkManager implements ICommunicationManager {
 	@Override
 	public void setIncomingMessageHandler(IMessageHandler messageHandler) {
 		this.messageHandler = messageHandler;
+	}
+
+	@Override
+	public void receiveAction(Operation op) {
+		// add operation to the message queue
+		if (messageHandler == null) {
+			return;
+		}
+		mq.add(op, this.messageHandler);
+		
+	}
+
+	@Override
+	public void setServerChannelActiveHandler(IMessageHandler messageHandler) {
+		// TODO Auto-generated method stub
+		this.serverInitHandler = messageHandler;
+		
+	}
+
+	@Override
+	public void serverChannelActiveAction() {
+		// TODO Auto-generated method stub
+		if (serverInitHandler == null) {
+			return;
+		}
+		serverInitHandler.handle(null);
+		
 	}
 
 }

@@ -28,6 +28,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
     	// group and print in the GUI
     	channels.add(ctx.channel());
     	ConnectionInfo.getInstance().addClientConnection(ctx.channel().remoteAddress().toString());
+    	Main.getCommunicationManager().serverChannelActiveAction();
     }
 
     @Override
@@ -57,6 +58,6 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
     	// then send to the server (parent)
     	Main.getClient().sentToServer(msg);
     	// run the action
-    	Main.getMessageQueue().add(op);
+    	Main.getCommunicationManager().receiveAction(op);
 	}
 }

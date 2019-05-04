@@ -11,8 +11,7 @@ import server.Server;
 public class Main {
 	private static Client client;
 	private static Server server;
-	private static Crdt data;
-	private static MessageQueue mq;
+	private static ICommunicationManager communicationManager;
 
 	public static void main(String[] args) {
 		processArgs(args);
@@ -43,22 +42,16 @@ public class Main {
 
 		client = new Client();
 
-		mq = new MessageQueue();
-
-
 		// initialize the Crdt (Model/Controller) and NotePadGUI (View)
 		init();
 	}
 
 	private static void init(){
-        ICommunicationManager communicationManager = new NetworkManager();
-		data = new Crdt(communicationManager);
+        communicationManager = new NetworkManager();
+		Crdt data = new Crdt(communicationManager);
 		NotePadGUI.init(data);
 	}
 
-	public static Crdt getCRDT() {
-		return data;
-	}
 
 	public static Client getClient() {
 		return client;
@@ -68,8 +61,8 @@ public class Main {
 		return server;
 	}
 
-	public static MessageQueue getMessageQueue() {
-		return mq;
+	public static ICommunicationManager getCommunicationManager() {
+		return communicationManager;
 	}
 	
 

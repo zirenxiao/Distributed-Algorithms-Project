@@ -1,10 +1,7 @@
 package client;
 
-import org.json.simple.JSONObject;
-
 import crdt.Operation;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.SimpleChannelInboundHandler;
 import main.Main;
 import utils.Settings;
@@ -17,7 +14,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<String> {
     
     @Override
     public void channelActive(final ChannelHandlerContext ctx) {
-    	
+
     }
     
     @Override
@@ -30,10 +27,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<String> {
         cause.printStackTrace();
         ctx.close();
     }
-    
-    public static void sentToServer(Object obj) {
-    	
-    }
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext arg0, String msg) throws Exception {
@@ -45,7 +38,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<String> {
 		Operation op = Settings.stringToOperation(msg);
 				
 		Main.getServer().broadcastToClients(msg);
-		Main.getMessageQueue().add(op);
+		Main.getCommunicationManager().receiveAction(op);
 	}
 
     
