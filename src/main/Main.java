@@ -3,9 +3,7 @@ package main;
 import client.Client;
 import client.NotePadGUI;
 import crdt.Crdt;
-import network.ICommunicationManager;
-import network.MessageQueue;
-import network.NetworkManager;
+import network.*;
 import server.Server;
 
 public class Main {
@@ -18,15 +16,16 @@ public class Main {
 	}
 	
 	private static void processArgs(String[] args) {
-		// args[0] = server port, default = 8888
-		int port;
+		// args[0] = server port
 		if (args.length==0) {
-			port = 8888;
+			System.err.println("You have to add server port at running.");
+			System.err.println("Usage: /app_name port");
 		}else {
-			port = Integer.parseInt(args[0]);
+			System.setProperty("port", args[0]);
 		}
-		System.err.println("Server starts at port " + port);
-		establishConnections(port);
+		System.setProperty("broadcastPort", "4445");
+		System.err.println("Server starts at port " + System.getProperty("port"));
+		establishConnections(Integer.parseInt(System.getProperty("port")));
 	}
 	
 	/**
@@ -41,6 +40,8 @@ public class Main {
 		server.start();
 
 		client = new Client();
+		new LocalNetworkDiscoveryService().start();
+		new LocalNetworkDiscoveryBroadcast().start();
 
 		// initialize the Crdt (Model/Controller) and NotePadGUI (View)
 		init();

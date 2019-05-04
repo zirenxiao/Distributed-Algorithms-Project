@@ -15,7 +15,6 @@ import utils.Settings;
 public class NetworkManager implements ICommunicationManager {
 	private IMessageHandler messageHandler = null;
 	private IMessageHandler serverInitHandler = null;
-	private IMessageHandler clientInitHandler = null;
 	private MessageQueue mq;
 
 	public NetworkManager() {
