@@ -11,9 +11,13 @@ public interface ICommunicationManager {
     void setIncomingMessageHandler(IMessageHandler messageHandler);
     
     // set message handler when a connection is opened
-    void setChannelActiveHandler(IMessageHandler messageHandler);
+    void setServerChannelActiveHandler(IMessageHandler messageHandler);
+    
+    void setClientChannelActiveHandler(IMessageHandler messageHandler);
 
     void receiveAction(Operation op);
     
-    void channelActiveAction(Operation op);
+    void serverChannelActiveAction();
+    
+    void clientChannelActiveAction();
 }

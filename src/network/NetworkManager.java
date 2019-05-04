@@ -13,8 +13,9 @@ import utils.Settings;
  *
  */
 public class NetworkManager implements ICommunicationManager {
-	private IMessageHandler messageHandler;
-	private IMessageHandler initHandler;
+	private IMessageHandler messageHandler = null;
+	private IMessageHandler serverInitHandler = null;
+	private IMessageHandler clientInitHandler = null;
 	private MessageQueue mq;
 
 	public NetworkManager() {
@@ -37,23 +38,46 @@ public class NetworkManager implements ICommunicationManager {
 	}
 
 	@Override
-	public void setChannelActiveHandler(IMessageHandler messageHandler) {
-		// TODO Auto-generated method stub
-		this.initHandler = messageHandler;
-		
-	}
-
-	@Override
 	public void receiveAction(Operation op) {
 		// add operation to the message queue
+		if (messageHandler == null) {
+			return;
+		}
 		mq.add(op, this.messageHandler);
 		
 	}
 
 	@Override
-	public void channelActiveAction(Operation op) {
+	public void setServerChannelActiveHandler(IMessageHandler messageHandler) {
 		// TODO Auto-generated method stub
-		initHandler.handle(op);
+		this.serverInitHandler = messageHandler;
+		
+	}
+
+	@Override
+	public void setClientChannelActiveHandler(IMessageHandler messageHandler) {
+		// TODO Auto-generated method stub
+		this.clientInitHandler = messageHandler;
+		
+	}
+
+	@Override
+	public void serverChannelActiveAction() {
+		// TODO Auto-generated method stub
+		if (serverInitHandler == null) {
+			return;
+		}
+		serverInitHandler.handle(null);
+		
+	}
+
+	@Override
+	public void clientChannelActiveAction() {
+		// TODO Auto-generated method stub
+		if (clientInitHandler == null) {
+			return;
+		}
+		clientInitHandler.handle(null);
 		
 	}
 

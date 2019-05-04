@@ -12,7 +12,6 @@ import tests.PathTests;
 public class Main {
 	private static Client client;
 	private static Server server;
-	private static Crdt data;
 	private static ICommunicationManager communicationManager;
 
 	public static void main(String[] args) {
@@ -50,13 +49,10 @@ public class Main {
 
 	private static void init(){
         communicationManager = new NetworkManager();
-		data = new Crdt(communicationManager);
+		Crdt data = new Crdt(communicationManager);
 		NotePadGUI.init(data);
 	}
 
-	public static Crdt getCRDT() {
-		return data;
-	}
 
 	public static Client getClient() {
 		return client;

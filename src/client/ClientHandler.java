@@ -17,7 +17,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<String> {
     
     @Override
     public void channelActive(final ChannelHandlerContext ctx) {
-    	
+    	Main.getCommunicationManager().clientChannelActiveAction();
     }
     
     @Override
