@@ -23,6 +23,13 @@ public class DocNode implements INode {
     }
 
     @Override
+    public INode takeLeftChild() {
+        INode node = leftChild;
+        leftChild = null;
+        return node;
+    }
+
+    @Override
     public void setLeftChild(INode node) {
         this.leftChild = (DocNode)node;
         node.setParent(this);
@@ -33,6 +40,12 @@ public class DocNode implements INode {
         return rightChild;
     }
 
+    @Override
+    public INode takeRightChild() {
+        INode node = rightChild;
+        rightChild = null;
+        return node;
+    }
 
 
     @Override
@@ -44,9 +57,7 @@ public class DocNode implements INode {
     @Override
     public void setParent(INode node) {
         this.parent = (DocNode) node;
-        if (element != null) {
-            element.setPath(getPathToRoot());
-        }
+        updateElementPath();
     }
 
     @Override
@@ -61,6 +72,13 @@ public class DocNode implements INode {
         }
         this.element = (DocElement) element;
         this.element.setPath(getPathToRoot());
+    }
+
+    @Override
+    public void updateElementPath() {
+        if (element != null) {
+            element.setPath(getPathToRoot());
+        }
     }
 
     private TreePath getPathToRoot() {

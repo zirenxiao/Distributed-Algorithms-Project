@@ -18,11 +18,11 @@ public class DocTree implements ITree {
     DocNode root;
 
 
-    public INode addNode(DocElement element) throws Exception {
+    public void addNode(DocElement element) throws Exception {
         INode node = searchNode(element.getPath());
         if (node.isEmpty()) {
             node.setElement(element);
-            return node;
+            //return node;
         } else {
             if (node.isRemoved()) {
                 if (element.getValue() != node.getElement().getValue()) {
@@ -30,12 +30,55 @@ public class DocTree implements ITree {
                 } else {
                     System.out.println("Received an element which was removed earlier");
                 }
-                return null;
+                //return null;
             } else {
-                throw new Exception("There is a conflict");
-                //ToDo: solveConflict();
+                System.out.println("Solving a conflict");
+                solveConflict(node, element);
+//                throw new Exception("There is a conflict");
             }
         }
+    }
+
+    private void solveConflict(INode node, IElement element) {
+        DocElement firstElement  = (DocElement) element;
+        DocElement secondElement = (DocElement) node.getElement();
+        //INode rightChild = null;
+        if (secondElement.isHappenedEarlier(firstElement)) {
+            // swap
+            node.setElement(firstElement);
+            firstElement = secondElement;
+            //rightChild = node.takeRightChild();
+        }
+        INode leftChild = node.getLeftChild();
+        if (leftChild == null) {
+            leftChild = createNode(firstElement, node, Direction.left);
+        } else {
+            solveConflict(leftChild, firstElement);
+        }
+//        if (rightChild != null) {
+//            leftChild.setRightChild(rightChild);
+//            updatePathForElements(rightChild);
+//        }
+    }
+
+    private void updatePathForElements(INode node) {
+        if (node == null)
+            return;
+        node.updateElementPath();
+        updatePathForElements(node.getLeftChild());
+        updatePathForElements(node.getRightChild());
+    }
+
+    private void swap(INode node, IElement secondElement) {
+        IElement firstElement = node.getElement();
+        node.setElement(secondElement);
+        INode leftChild = node.getLeftChild();
+        if (leftChild == null) {
+            createNode((DocElement) firstElement, node, Direction.left);
+        } else {
+            solveConflict(leftChild, firstElement);
+        }
+
     }
 
     private INode searchNode(TreePath path) {

@@ -29,7 +29,7 @@ public class Crdt implements ICrdt {
      * Method update() is used to update DocTree by Editor
      * */
     @Override
-    public void update(OperationType operation, char symbol, int position) {
+    synchronized public void update(OperationType operation, char symbol, int position) {
         INode node = null;
         if (operation == OperationType.insert) {
             node = doc.addSymbol(symbol, position);
