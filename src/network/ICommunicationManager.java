@@ -10,14 +10,17 @@ public interface ICommunicationManager {
     // set message handler
     void setIncomingMessageHandler(IMessageHandler messageHandler);
     
-    // set message handler when a connection is opened
-    void setServerChannelActiveHandler(IMessageHandler messageHandler);
+    // set message handler when a connection is opened at server side
     
-    void setClientChannelActiveHandler(IMessageHandler messageHandler);
+    void setServerChannelActiveHandler(IMessageHandler activeHandler);
 
+    // actions when a message received
     void receiveAction(Operation op);
     
+    // when a new connection is established, the server will send the whole 
+    // doc to the new connection (client). This method will be called when
+    // the server received a connection. The specific action should be defined
+    // in the activeHandler.
     void serverChannelActiveAction();
-    
-    void clientChannelActiveAction();
+
 }

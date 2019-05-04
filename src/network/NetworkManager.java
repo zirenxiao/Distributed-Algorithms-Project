@@ -55,29 +55,12 @@ public class NetworkManager implements ICommunicationManager {
 	}
 
 	@Override
-	public void setClientChannelActiveHandler(IMessageHandler messageHandler) {
-		// TODO Auto-generated method stub
-		this.clientInitHandler = messageHandler;
-		
-	}
-
-	@Override
 	public void serverChannelActiveAction() {
 		// TODO Auto-generated method stub
 		if (serverInitHandler == null) {
 			return;
 		}
 		serverInitHandler.handle(null);
-		
-	}
-
-	@Override
-	public void clientChannelActiveAction() {
-		// TODO Auto-generated method stub
-		if (clientInitHandler == null) {
-			return;
-		}
-		clientInitHandler.handle(null);
 		
 	}
 

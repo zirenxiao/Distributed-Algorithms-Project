@@ -28,7 +28,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
     	// group and print in the GUI
     	channels.add(ctx.channel());
     	ConnectionInfo.getInstance().addClientConnection(ctx.channel().remoteAddress().toString());
-    	Main.getCommunicationManager().clientChannelActiveAction();
+    	Main.getCommunicationManager().serverChannelActiveAction();
     }
 
     @Override

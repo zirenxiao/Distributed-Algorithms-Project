@@ -1,10 +1,7 @@
 package client;
 
-import org.json.simple.JSONObject;
-
 import crdt.Operation;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.SimpleChannelInboundHandler;
 import main.Main;
 import utils.Settings;
@@ -17,7 +14,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<String> {
     
     @Override
     public void channelActive(final ChannelHandlerContext ctx) {
-    	Main.getCommunicationManager().clientChannelActiveAction();
+
     }
     
     @Override
