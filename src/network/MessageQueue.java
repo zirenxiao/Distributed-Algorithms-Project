@@ -15,9 +15,9 @@ public class MessageQueue{
 		queue = new ArrayList<Operation>();
 	}
 	
-	public void add(Operation o) {
+	public void add(Operation o, IMessageHandler messageHandler) {
 		queue.add(o);
-		this.setActive();
+		this.setActive(messageHandler);
 	}
 	
 	public void delete() {
@@ -34,25 +34,25 @@ public class MessageQueue{
 		return o;
 	}
 	
-	private void handle() {
+	private void handle(IMessageHandler messageHandler) {
 		Operation o = getFirst();
-		Main.getCRDT().sync(o);
+		messageHandler.handle(o);
 	}
 	
-	private void handleQueue() {
+	private void handleQueue(IMessageHandler messageHandler) {
 		while (!queue.isEmpty()) {
-			handle();
+			handle(messageHandler);
 		}
 		// after finished, set to inactive
 		this.active = false;
 	}
 	
-	public void setActive() {
+	public void setActive(IMessageHandler messageHandler) {
 		if (!this.active) {
 			// when the queue handler is active
 			// don't call it second time
 			this.active = true;
-			handleQueue();
+			handleQueue(messageHandler);
 		}
 	}
 

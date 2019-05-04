@@ -30,10 +30,6 @@ public class ClientHandler extends SimpleChannelInboundHandler<String> {
         cause.printStackTrace();
         ctx.close();
     }
-    
-    public static void sentToServer(Object obj) {
-    	
-    }
 
 	@Override
 	protected void channelRead0(ChannelHandlerContext arg0, String msg) throws Exception {
@@ -45,7 +41,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<String> {
 		Operation op = Settings.stringToOperation(msg);
 				
 		Main.getServer().broadcastToClients(msg);
-		Main.getMessageQueue().add(op);
+		Main.getCommunicationManager().receiveAction(op);
 	}
 
     
