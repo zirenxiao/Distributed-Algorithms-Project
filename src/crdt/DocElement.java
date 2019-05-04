@@ -1,6 +1,7 @@
 package crdt;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class DocElement implements IElement, Serializable {
     private TreePath path;
@@ -9,6 +10,11 @@ public class DocElement implements IElement, Serializable {
 
     public DocElement(char symbol) {
         this.symbol = symbol;
+        timestamp = Timestamp.valueOf(LocalDateTime.now());
+    }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
     }
 
     @Override
@@ -24,5 +30,13 @@ public class DocElement implements IElement, Serializable {
     @Override
     public char getValue() {
         return symbol;
+    }
+
+    public boolean isHappenedEarlier(IElement that) {
+        return this.getTimestamp().compareTo(that.getTimestamp()) < 0;
+    }
+
+    public String toString() {
+        return String.valueOf(symbol);
     }
 }

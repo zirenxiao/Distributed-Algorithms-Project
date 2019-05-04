@@ -7,7 +7,6 @@ import network.ICommunicationManager;
 import network.MessageQueue;
 import network.NetworkManager;
 import server.Server;
-import tests.PathTests;
 
 public class Main {
 	private static Client client;
