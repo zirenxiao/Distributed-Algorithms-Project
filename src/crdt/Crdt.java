@@ -19,8 +19,8 @@ public class Crdt implements ICrdt {
 
         comm.setServerChannelActiveHandler(new IInitMessageHandler() {
             @Override
-            public void handle(ArrayList<INode> doc) {
-                setDoc(doc);
+            public void handle(ArrayList<Operation> operations) {
+                setDoc(operations);
             }
         });
 
@@ -87,22 +87,26 @@ public class Crdt implements ICrdt {
         updateEditor(position, operation.getType());
     }
 
-    public void setDoc(ArrayList<INode> nodes) {
-        if (nodes == null) {
+    public void setDoc(ArrayList<Operation> operations) {
+        if (operations == null) {
             return;
         }
-        for (INode node : nodes) {
-            try {
-                doc.addNode((DocElement) node.getElement(), node.isRemoved());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        for (Operation o: operations) {
+            sync(o);
         }
     }
 
     @Override
-    public ArrayList<INode> getDoc() {
-        return doc.getDoc();
+    public ArrayList<Operation> getDoc() {
+        ArrayList<Operation> operations = new ArrayList<>();
+        for (INode node : doc.getDoc()) {
+            OperationType type = OperationType.insert;
+            if (node.isRemoved()) {
+                type = OperationType.remove;
+            }
+            operations.add(new Operation(type, (DocElement) node.getElement()));
+        }
+        return operations;
     }
 
     @Override
