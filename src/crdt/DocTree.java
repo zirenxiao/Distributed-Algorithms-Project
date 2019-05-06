@@ -16,10 +16,12 @@ class P {
 
 public class DocTree implements ITree {
     DocNode root;
-    int numberOfSymbols = 10000000;
-
 
     public int addNode(DocElement element) throws Exception {
+        return addNode(element, false);
+    }
+
+    public int addNode(DocElement element, boolean isRemoved) throws Exception {
         INode node = searchNode(element.getPath());
         if (node.isEmpty()) {
             node.setElement(element);
@@ -35,12 +37,17 @@ public class DocTree implements ITree {
                 solveConflict(node, element);
             }
         }
+        // add removed node for full synchronization
+        if (isRemoved) {
+            node.remove();
+            return -1;
+        }
         return findNodePosition(node);
     }
 
     private int findNodePosition(INode node) {
         ArrayList<INode> nodes = new ArrayList();
-        inorderTraverse(root, new P(numberOfSymbols), nodes);
+        inorderTraverse(root, new P(-1), nodes, null);
 
         return nodes.indexOf(node);
     }
@@ -137,7 +144,7 @@ public class DocTree implements ITree {
 
     private ArrayList<INode> traverseTreeUntilPosition(int position) {
         ArrayList<INode> nodes = new ArrayList();
-        inorderTraverse(root, new P(position), nodes);
+        inorderTraverse(root, new P(position), nodes, null);
         return nodes;
     }
 
@@ -146,20 +153,26 @@ public class DocTree implements ITree {
         return nodes.get(nodes.size()-1);
     }
 
-    private static boolean inorderTraverse(INode root, P positions, ArrayList<INode> result) {
-        if (root != null) {
-            boolean exit = inorderTraverse(root.getLeftChild(), positions, result);
+    private static boolean inorderTraverse(INode currentNode,
+                                           P positions,
+                                           ArrayList<INode> visibleNodes,
+                                           ArrayList<INode> allNodes) {
+        if (currentNode != null) {
+            boolean exit = inorderTraverse(currentNode.getLeftChild(), positions, visibleNodes, allNodes);
             if (exit) {
                 return true;
             }
             if (positions.current == positions.stop) {
                 return true;
             }
-            if (!root.isRemoved() && !root.isEmpty()) {
-                result.add(root);
+            if (!currentNode.isRemoved() && !currentNode.isEmpty()) {
+                visibleNodes.add(currentNode);
                 positions.current++;
             }
-            return inorderTraverse(root.getRightChild(), positions, result);
+            if (allNodes != null) {
+                allNodes.add(currentNode);
+            }
+            return inorderTraverse(currentNode.getRightChild(), positions, visibleNodes, allNodes);
         }
         return false;
     }
@@ -245,5 +258,13 @@ public class DocTree implements ITree {
             str.append(node.getElement().getValue());
         }
         return str.toString();
+    }
+
+    public ArrayList<INode> getDoc() {
+        ArrayList<INode> nodes = new ArrayList();
+        ArrayList<INode> allNodes = new ArrayList();
+        inorderTraverse(root, new P(-1), nodes, allNodes);
+
+        return allNodes;
     }
 }

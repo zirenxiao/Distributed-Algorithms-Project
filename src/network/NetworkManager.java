@@ -3,6 +3,7 @@
  */
 package network;
 
+import crdt.IInitMessageHandler;
 import crdt.IMessageHandler;
 import crdt.Operation;
 import main.Main;
@@ -14,7 +15,7 @@ import utils.Settings;
  */
 public class NetworkManager implements ICommunicationManager {
 	private IMessageHandler messageHandler = null;
-	private IMessageHandler serverInitHandler = null;
+	private IInitMessageHandler serverInitHandler = null;
 	private MessageQueue mq;
 
 	public NetworkManager() {
@@ -47,7 +48,7 @@ public class NetworkManager implements ICommunicationManager {
 	}
 
 	@Override
-	public void setServerChannelActiveHandler(IMessageHandler messageHandler) {
+	public void setServerChannelActiveHandler(IInitMessageHandler messageHandler) {
 		// TODO Auto-generated method stub
 		this.serverInitHandler = messageHandler;
 		

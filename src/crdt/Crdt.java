@@ -17,6 +17,13 @@ public class Crdt implements ICrdt {
         doc = new DocTree();
         this.comm = comm;
 
+        comm.setServerChannelActiveHandler(new IInitMessageHandler() {
+            @Override
+            public void handle(ArrayList<INode> doc) {
+                setDoc(doc);
+            }
+        });
+
         comm.setIncomingMessageHandler(new IMessageHandler() {
             @Override
             public void handle(Operation o) {
@@ -80,9 +87,22 @@ public class Crdt implements ICrdt {
         updateEditor(position, operation.getType());
     }
 
+    public void setDoc(ArrayList<INode> nodes) {
+        if (nodes == null) {
+            return;
+        }
+        for (INode node : nodes) {
+            try {
+                doc.addNode((DocElement) node.getElement(), node.isRemoved());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     @Override
-    public void uploadDoc(ArrayList<INode> doc) {
-        // ToDo: upload whole doc if client connects when other have been working already
+    public ArrayList<INode> getDoc() {
+        return doc.getDoc();
     }
 
     @Override

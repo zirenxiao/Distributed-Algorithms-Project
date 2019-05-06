@@ -1,5 +1,6 @@
 package network;
 
+import crdt.IInitMessageHandler;
 import crdt.IMessageHandler;
 import crdt.Operation;
 
@@ -12,7 +13,7 @@ public interface ICommunicationManager {
     
     // set message handler when a connection is opened at server side
     
-    void setServerChannelActiveHandler(IMessageHandler activeHandler);
+    void setServerChannelActiveHandler(IInitMessageHandler activeHandler);
 
     // actions when a message received
     void receiveAction(Operation op);
