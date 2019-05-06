@@ -5,6 +5,7 @@ import client.NotePadGUI;
 import crdt.Crdt;
 import network.*;
 import server.Server;
+import tests.CrdtTests;
 
 public class Main {
 	private static Client client;
@@ -13,6 +14,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		processArgs(args);
+		CrdtTests.testGetNodePosition();
 	}
 	
 	private static void processArgs(String[] args) {

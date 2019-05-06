@@ -303,7 +303,7 @@ public class NotePadGUI extends javax.swing.JFrame {
      * The input it requires is the whole string
      * @param str
      */
-    public static void updateEditor(String str){
+    public static void updateEditor(String str, int changedPosition, OperationType operationType){
         isFromOthers = true;
         textArea.setText(str);
         isFromOthers = false;

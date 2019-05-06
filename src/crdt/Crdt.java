@@ -59,24 +59,25 @@ public class Crdt implements ICrdt {
      * */
     @Override
     public void sync(Operation operation) {
+        int position = -1;
         if (operation == null) {
             return;
         }
         if (operation.getType() == OperationType.insert) {
             try {
-                doc.addNode(operation.getElement());
+                position = doc.addNode(operation.getElement());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         if (operation.getType() == OperationType.remove) {
             try {
-                doc.removeNode(operation.getElement());
+                position = doc.removeNode(operation.getElement());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        updateEditor();
+        updateEditor(position, operation.getType());
     }
 
     @Override
@@ -85,8 +86,8 @@ public class Crdt implements ICrdt {
     }
 
     @Override
-    public void updateEditor() {
-        NotePadGUI.updateEditor(doc.toString());
+    public void updateEditor(int changedPosition, OperationType operationType) {
+        NotePadGUI.updateEditor(doc.toString(), changedPosition, operationType);
 //        System.out.println(doc.toString());
     }
 }

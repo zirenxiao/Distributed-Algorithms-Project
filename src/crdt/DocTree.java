@@ -16,13 +16,13 @@ class P {
 
 public class DocTree implements ITree {
     DocNode root;
+    int numberOfSymbols = 10000000;
 
 
-    public void addNode(DocElement element) throws Exception {
+    public int addNode(DocElement element) throws Exception {
         INode node = searchNode(element.getPath());
         if (node.isEmpty()) {
             node.setElement(element);
-            //return node;
         } else {
             if (node.isRemoved()) {
                 if (element.getValue() != node.getElement().getValue()) {
@@ -30,13 +30,19 @@ public class DocTree implements ITree {
                 } else {
                     System.out.println("Received an element which was removed earlier");
                 }
-                //return null;
             } else {
                 System.out.println("Solving a conflict");
                 solveConflict(node, element);
-//                throw new Exception("There is a conflict");
             }
         }
+        return findNodePosition(node);
+    }
+
+    private int findNodePosition(INode node) {
+        ArrayList<INode> nodes = new ArrayList();
+        inorderTraverse(root, new P(numberOfSymbols), nodes);
+
+        return nodes.indexOf(node);
     }
 
     private void solveConflict(INode node, IElement element) {
@@ -211,7 +217,8 @@ public class DocTree implements ITree {
         return node;
     }
 
-    public void removeNode(DocElement element) throws Exception {
+    public int removeNode(DocElement element) throws Exception {
+        int position = -1;
         if (element == null) {
             throw  new IllegalArgumentException();
         }
@@ -220,12 +227,14 @@ public class DocTree implements ITree {
             if (element.getValue() != node.getElement().getValue()) {
                 throw new Exception(String.format("Symbols in the received element '%s' and in the stored element '%s' don't match", element.getValue(), node.getElement().getValue()));
             }
+            position = findNodePosition(node);
             node.remove();
         } else {
             node.setElement(element);
             node.remove();
             System.out.println("Removed an element which hasn't been added yet");
         }
+        return position;
     }
 
     @Override

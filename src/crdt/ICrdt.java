@@ -7,6 +7,6 @@ public interface ICrdt {
     void sync(Operation operation);
     void uploadDoc(ArrayList<INode> doc);
 
-    void updateEditor();
+    void updateEditor(int changedPosition, OperationType operationType);
 
 }

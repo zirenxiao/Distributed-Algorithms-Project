@@ -252,4 +252,40 @@ public class CrdtTests {
         System.out.println(String.format("Actual value: %s", doc.toString()));
     }
 
+    public static void testGetNodePosition() {
+        System.out.println("Test DocTree.findNodePosition()");
+        DocTree doc = new DocTree();
+        //       b
+        //   a      c
+        //            d
+        doc.addSymbol('b', 0);
+        doc.addSymbol('c', 1);
+        doc.addSymbol('a', 0);
+
+
+
+
+        TreePath path = new TreePath();
+        path.addStep(Direction.right);
+        path.addStep(Direction.right);
+        DocElement element = new DocElement('d');
+        element.setPath(path);
+
+
+
+        System.out.println(String.format("Doc: %s", doc.toString()));
+
+        int position = -1;
+        try {
+            position = doc.addNode(element);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        // 0a1b2c3d
+        System.out.println("Should be: 3");
+        System.out.println(String.format("Actual value: %d", position));
+    }
+
 }
