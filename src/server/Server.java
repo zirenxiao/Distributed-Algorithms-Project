@@ -33,7 +33,6 @@ public class Server extends Thread{
 	}
 	
     public void broadcastToClients(String str) {
-    	
     	ChannelGroup channels = ServerHandler.channels;
     	for (Channel c: channels) {
 //    		System.out.println("BTC:"+str);
