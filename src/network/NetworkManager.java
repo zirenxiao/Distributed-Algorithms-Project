@@ -63,4 +63,10 @@ public class NetworkManager implements ICommunicationManager {
 		
 	}
 
+	@Override
+	public void isConsistent(String in) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

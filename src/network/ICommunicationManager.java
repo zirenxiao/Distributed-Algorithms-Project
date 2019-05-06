@@ -22,5 +22,7 @@ public interface ICommunicationManager {
     // the server received a connection. The specific action should be defined
     // in the activeHandler.
     void serverChannelActiveAction();
+    
+    void isConsistent(String in);
 
 }

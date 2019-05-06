@@ -20,11 +20,11 @@ public class Main {
 		if (args.length==0) {
 			System.err.println("You have to add server port at running.");
 			System.err.println("Usage: /app_name port");
+			System.exit(0);
 		}else {
 			System.setProperty("port", args[0]);
 		}
 		System.setProperty("broadcastPort", "4445");
-		System.err.println("Server starts at port " + System.getProperty("port"));
 		establishConnections(Integer.parseInt(System.getProperty("port")));
 	}
 	
@@ -40,6 +40,8 @@ public class Main {
 		server.start();
 
 		client = new Client();
+		
+		// broadcast send && receive service
 		new LocalNetworkDiscoveryService().start();
 		new LocalNetworkDiscoveryBroadcast().start();
 
