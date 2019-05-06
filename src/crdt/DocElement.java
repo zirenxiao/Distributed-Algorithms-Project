@@ -40,4 +40,9 @@ public class DocElement implements IElement, Serializable {
 //        return String.valueOf(symbol);
         return String.format("Value: '%s', Timestamp: %s", symbol, timestamp.toString());
     }
+
+	public void setTimestamp(Timestamp timestamp) {
+		this.timestamp = timestamp;
+	}
+    
 }

@@ -40,6 +40,7 @@ public class NotePadGUI extends javax.swing.JFrame {
     private Clipboard clipBoard = getToolkit().getSystemClipboard();
     private static Crdt data;
     private static boolean isFromOthers = false;
+    private static int cursorPosition = 0;
 
     private NotePadGUI() {
         initComponents();
@@ -279,8 +280,10 @@ public class NotePadGUI extends javax.swing.JFrame {
     private void multipleInsert(String stringToBeInserted, int initPosition){
         for(int i = 0 ; i < stringToBeInserted.length() ; i++){
             char ch = stringToBeInserted.charAt(i);
-            data.update(OperationType.insert,ch,initPosition+i);
+            data.update(OperationType.insert,ch,initPosition);
+            initPosition++;
         }
+        updateCursorPosition(initPosition);
     }
 
     /**
@@ -288,6 +291,7 @@ public class NotePadGUI extends javax.swing.JFrame {
      * @param initPosition the initial position of where to start deleting
      */
     private void multipleDelete(String stringToBeDeleted, int initPosition){
+        updateCursorPosition(initPosition);
         for(int i = 0 ; i < stringToBeDeleted.length() ; i++){
             char ch = stringToBeDeleted.charAt(i);
             data.update(OperationType.remove,ch,initPosition);
@@ -303,6 +307,16 @@ public class NotePadGUI extends javax.swing.JFrame {
         isFromOthers = true;
         textArea.setText(str);
         isFromOthers = false;
+        setCursorPosition();
+    }
+
+    private static void updateCursorPosition(int curPosition){
+        cursorPosition = curPosition;
+
+    }
+
+    private static void setCursorPosition(){
+        textArea.setCaretPosition(cursorPosition);
     }
 
     /**
