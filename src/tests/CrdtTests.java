@@ -190,4 +190,66 @@ public class CrdtTests {
 
     }
 
+    public static void testConflictSolving() {
+        System.out.println("Test DocTree.addNode() in case of the conflict");
+        DocTree doc = new DocTree();
+        //       b
+        //   a      c
+        doc.addSymbol('b', 0);
+        doc.addSymbol('c', 1);
+        doc.addSymbol('a', 0);
+
+
+        TreePath path = new TreePath();
+        path.addStep(Direction.right);
+        DocElement element = new DocElement('a');
+        element.setPath(path);
+
+
+
+        System.out.println(String.format("Doc: %s", doc.toString()));
+
+        try {
+            doc.addNode(element);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Should be: abac");
+        System.out.println(String.format("Actual value: %s", doc.toString()));
+    }
+
+
+    public static void testConflictSolving_1() {
+        System.out.println("Test DocTree.addNode() in case of the conflict");
+        DocTree doc = new DocTree();
+        //       f
+        //   o      a
+        //            b
+        doc.addSymbol('f', 0);
+        doc.addSymbol('a', 1);
+        doc.addSymbol('b', 2);
+        doc.addSymbol('o', 0);
+
+
+
+        TreePath path = new TreePath();
+        path.addStep(Direction.right);
+        DocElement element = new DocElement('m');
+        element.setPath(path);
+
+
+
+        System.out.println(String.format("Doc: %s", doc.toString()));
+
+        try {
+            doc.addNode(element);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("Should be: ofamb");
+        System.out.println(String.format("Actual value: %s", doc.toString()));
+    }
+
 }
