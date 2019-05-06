@@ -2,6 +2,7 @@ package utils;
 
 
 import java.io.*;
+import java.sql.Timestamp;
 import java.util.Base64;
 
 import org.json.simple.JSONObject;
@@ -43,6 +44,7 @@ public class Settings {
 		content.put("type", o.getType().toString());
 		content.put("symbol", Character.toString(o.getElement().getValue()));
 		content.put("path", toString(o.getElement().getPath()));
+		content.put("timestamp", o.getElement().getTimestamp().toString());
 //		System.out.println(content.toJSONString());
 //		System.out.println(stringToJson(content.toJSONString()));
 		return content.toJSONString();
@@ -53,6 +55,7 @@ public class Settings {
 		DocElement e = new DocElement(o.get("symbol").toString().charAt(0));
 		Operation op = new Operation(OperationType.valueOf(o.get("type").toString()), e);
 		op.getElement().setPath((TreePath) fromString(o.get("path").toString()));
+		op.getElement().setTimestamp(Timestamp.valueOf(o.get("timestamp").toString()));
 //		System.out.println(op.getElement().getValue());
 //		System.out.println(op.getElement().getPath().length());
 		return op;
