@@ -13,6 +13,7 @@ import crdt.DocElement;
 import crdt.Operation;
 import crdt.OperationType;
 import crdt.TreePath;
+import network.Request;
 
 
 public class Settings {
@@ -37,28 +38,12 @@ public class Settings {
 		return null;
     }
 	
-	@SuppressWarnings("unchecked")
-	public static String operationToString(Operation o) {
-		JSONObject content;
-		content = new JSONObject();
-		content.put("type", o.getType().toString());
-		content.put("symbol", Character.toString(o.getElement().getValue()));
-		content.put("path", toString(o.getElement().getPath()));
-		content.put("timestamp", o.getElement().getTimestamp().toString());
-//		System.out.println(content.toJSONString());
-//		System.out.println(stringToJson(content.toJSONString()));
-		return content.toJSONString();
+	public static String requestToString(Request o) {
+		return toString(o);
 	}
 	
-	public static Operation jsonToOperation(JSONObject o) {
-//		System.out.println(o.toJSONString());
-		DocElement e = new DocElement(o.get("symbol").toString().charAt(0));
-		Operation op = new Operation(OperationType.valueOf(o.get("type").toString()), e);
-		op.getElement().setPath((TreePath) fromString(o.get("path").toString()));
-		op.getElement().setTimestamp(Timestamp.valueOf(o.get("timestamp").toString()));
-//		System.out.println(op.getElement().getValue());
-//		System.out.println(op.getElement().getPath().length());
-		return op;
+	public static Request stringToRequest(String o) {
+		return (Request) fromString(o);
 	}
 	
 	private static Object fromString(String s){
@@ -77,7 +62,6 @@ public class Settings {
 			e.printStackTrace();
 		}
 		return null;
-		
 	}
 	
 	/** Write the object to a Base64 string. */
@@ -94,11 +78,6 @@ public class Settings {
 		}
 		
 		return Base64.getEncoder().encodeToString(baos.toByteArray()); 
-	}
-	
-	public static Operation stringToOperation(String str) {
-		JSONObject jo = stringToJson(str);
-		return jsonToOperation(jo);
 	}
 
 }

@@ -24,12 +24,25 @@ public class NetworkManager implements ICommunicationManager {
 
 	@Override
 	public void broadcastMessage(Operation operation) {
+		Request r = new Request();
+		r.add(operation);
+		
 		// to server
-		Main.getClient().sentToServer(Settings.operationToString(operation));
+		toClients(Settings.requestToString(r));
 		
 		// to clients
-		Main.getServer().broadcastToClients(Settings.operationToString(operation));
+		toServer(Settings.requestToString(r));
 
+	}
+	
+	@Override
+	public void toClients(String s) {
+		Main.getServer().broadcastToClients(s);
+	}
+	
+	@Override
+	public void toServer(String s) {
+		Main.getClient().sentToServer(s);
 	}
 
 	@Override
@@ -38,12 +51,15 @@ public class NetworkManager implements ICommunicationManager {
 	}
 
 	@Override
-	public void receiveAction(Operation op) {
+	public void receiveAction(Request r) {
 		// add operation to the message queue
 		if (messageHandler == null) {
 			return;
 		}
-		mq.add(op, this.messageHandler);
+		while (!r.isEmpty()) {
+			mq.add(r.getFirst(), this.messageHandler);
+		}
+		
 		
 	}
 
@@ -55,18 +71,12 @@ public class NetworkManager implements ICommunicationManager {
 	}
 
 	@Override
-	public void serverChannelActiveAction() {
+	public void serverChannelActiveAction(Request r) {
 		// TODO Auto-generated method stub
 		if (serverInitHandler == null) {
 			return;
 		}
-		serverInitHandler.handle(null);
-		
-	}
-
-	@Override
-	public void isConsistent(String in) {
-		// TODO Auto-generated method stub
+		serverInitHandler.handle(r.getList());
 		
 	}
 

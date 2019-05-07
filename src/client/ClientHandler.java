@@ -1,9 +1,9 @@
 package client;
 
-import crdt.Operation;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import main.Main;
+import network.Request;
 import utils.Settings;
 
 
@@ -34,11 +34,12 @@ public class ClientHandler extends SimpleChannelInboundHandler<String> {
 		// redirect to all other clients (children)
 		// and run the action
 				
+		
 //		System.out.println("cl:"+msg);
-		Operation op = Settings.stringToOperation(msg);
+		Request r = Settings.stringToRequest(msg);
 				
-		Main.getServer().broadcastToClients(msg);
-		Main.getCommunicationManager().receiveAction(op);
+		Main.getCommunicationManager().toClients(msg);
+		Main.getCommunicationManager().receiveAction(r);
 	}
 
     

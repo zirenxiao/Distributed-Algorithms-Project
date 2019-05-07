@@ -10,6 +10,7 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import main.ConnectionInfo;
 import main.Main;
+import network.Request;
 import utils.Settings;
 
 /**
@@ -25,7 +26,9 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
     	// group and print in the GUI
     	channels.add(ctx.channel());
     	ConnectionInfo.getInstance().addClientConnection(ctx.channel().remoteAddress().toString());
-    	Main.getCommunicationManager().serverChannelActiveAction();
+//    	Main.getCommunicationManager().serverChannelActiveAction();
+    	Request r = new Request(Main.getCRDT().getDoc());
+    	ctx.writeAndFlush(Settings.requestToString(r));
     }
 
     @Override
@@ -43,7 +46,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
     	
 //    	System.out.println("sv:"+msg);
     	
-    	Operation op = Settings.stringToOperation(msg);
+    	Request op = Settings.stringToRequest(msg);
     	
     	for (Channel c: channels) {
     		// first send to all connected clients (children)
@@ -53,7 +56,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
     		}
     	}
     	// then send to the server (parent)
-    	Main.getClient().sentToServer(msg);
+    	Main.getCommunicationManager().toServer(msg);
     	// run the action
     	Main.getCommunicationManager().receiveAction(op);
 	}

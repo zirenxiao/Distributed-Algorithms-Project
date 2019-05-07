@@ -11,6 +11,7 @@ public class Main {
 	private static Client client;
 	private static Server server;
 	private static ICommunicationManager communicationManager;
+	private static Crdt data;
 
 	public static void main(String[] args) {
 		processArgs(args);
@@ -53,7 +54,7 @@ public class Main {
 
 	private static void init(){
         communicationManager = new NetworkManager();
-		Crdt data = new Crdt(communicationManager);
+		data = new Crdt(communicationManager);
 		NotePadGUI.init(data);
 	}
 
@@ -68,6 +69,10 @@ public class Main {
 
 	public static ICommunicationManager getCommunicationManager() {
 		return communicationManager;
+	}
+
+	public static Crdt getCRDT() {
+		return data;
 	}
 	
 

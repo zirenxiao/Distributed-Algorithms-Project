@@ -16,14 +16,15 @@ public interface ICommunicationManager {
     void setServerChannelActiveHandler(IInitMessageHandler activeHandler);
 
     // actions when a message received
-    void receiveAction(Operation op);
+    void receiveAction(Request r);
     
     // when a new connection is established, the server will send the whole 
     // doc to the new connection (client). This method will be called when
     // the server received a connection. The specific action should be defined
     // in the activeHandler.
-    void serverChannelActiveAction();
+    void serverChannelActiveAction(Request r);
     
-    void isConsistent(String in);
+    public void toClients(String s);
+    public void toServer(String s);
 
 }
