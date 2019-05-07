@@ -3,7 +3,6 @@
  */
 package network;
 
-import crdt.IInitMessageHandler;
 import crdt.IMessageHandler;
 import crdt.Operation;
 import main.Main;
@@ -15,7 +14,6 @@ import utils.Settings;
  */
 public class NetworkManager implements ICommunicationManager {
 	private IMessageHandler messageHandler = null;
-	private IInitMessageHandler serverInitHandler = null;
 	private MessageQueue mq;
 
 	public NetworkManager() {
@@ -59,25 +57,6 @@ public class NetworkManager implements ICommunicationManager {
 		while (!r.isEmpty()) {
 			mq.add(r.getFirst(), this.messageHandler);
 		}
-		
-		
-	}
-
-	@Override
-	public void setServerChannelActiveHandler(IInitMessageHandler messageHandler) {
-		// TODO Auto-generated method stub
-		this.serverInitHandler = messageHandler;
-		
-	}
-
-	@Override
-	public void serverChannelActiveAction(Request r) {
-		// TODO Auto-generated method stub
-		if (serverInitHandler == null) {
-			return;
-		}
-		serverInitHandler.handle(r.getList());
-		
 	}
 
 }
