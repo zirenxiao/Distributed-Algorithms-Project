@@ -14,6 +14,9 @@ public class Main {
 	private static Crdt data;
 
 	public static void main(String[] args) {
+		System.setProperty("broadcastPort", "4445");
+		System.setProperty("certPath", "certificates/cert.pem");
+		System.setProperty("pkPath", "certificates/key.pem");
 		processArgs(args);
 		CrdtTests.testGetNodePosition();
 	}
@@ -27,7 +30,6 @@ public class Main {
 		}else {
 			System.setProperty("port", args[0]);
 		}
-		System.setProperty("broadcastPort", "4445");
 		establishConnections(Integer.parseInt(System.getProperty("port")));
 	}
 	
@@ -45,8 +47,8 @@ public class Main {
 		client = new Client();
 		
 		// broadcast send && receive service
-		new LocalNetworkDiscoveryService().start();
-		new LocalNetworkDiscoveryBroadcast().start();
+//		new LocalNetworkDiscoveryService().start();
+//		new LocalNetworkDiscoveryBroadcast().start();
 
 		// initialize the Crdt (Model/Controller) and NotePadGUI (View)
 		init();

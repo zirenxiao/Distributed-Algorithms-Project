@@ -2,6 +2,7 @@ package network;
 
 import crdt.IMessageHandler;
 import crdt.Operation;
+import io.netty.channel.ChannelHandlerContext;
 
 public interface ICommunicationManager {
 	// broadcast message to other peers
@@ -12,7 +13,8 @@ public interface ICommunicationManager {
     
 
     // actions when a message received
-    void receiveAction(Request r);
+    void receiveAction(OperationRequest r);
+    void echoAction(String r, ChannelHandlerContext ctx);
     
     public void toClients(String s);
     public void toServer(String s);

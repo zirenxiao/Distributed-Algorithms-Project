@@ -1,25 +1,24 @@
 package network;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import crdt.Operation;
 
-public class Request implements Serializable {
-
+public class OperationRequest implements Requests {
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4398837851686836254L;
-	
+	private static final long serialVersionUID = -2172337042578617129L;
 	private ArrayList<Operation> op;
+	private RequestType type = RequestType.OPERATION;
 
-	public Request() {
+	public OperationRequest() {
 		// TODO Auto-generated constructor stub
 		op = new ArrayList<Operation>();
 	}
 	
-	public Request(ArrayList<Operation> o) {
+	public OperationRequest(ArrayList<Operation> o) {
 		// TODO Auto-generated constructor stub
 		op = new ArrayList<Operation>();
 		this.copyOperations(o);
@@ -55,5 +54,17 @@ public class Request implements Serializable {
 		for (int i=0; i<o.size(); i++) {
 			this.add(o.get(i));
 		}
+	}
+
+	@Override
+	public RequestType getType() {
+		// TODO Auto-generated method stub
+		return type;
+	}
+
+	@Override
+	public void setType(RequestType t) {
+		// TODO Auto-generated method stub
+		
 	}
 }

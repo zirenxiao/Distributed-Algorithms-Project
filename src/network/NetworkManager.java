@@ -5,8 +5,8 @@ package network;
 
 import crdt.IMessageHandler;
 import crdt.Operation;
+import io.netty.channel.ChannelHandlerContext;
 import main.Main;
-import utils.Settings;
 
 /**
  * @author zirenxiao
@@ -22,14 +22,17 @@ public class NetworkManager implements ICommunicationManager {
 
 	@Override
 	public void broadcastMessage(Operation operation) {
-		Request r = new Request();
+		
+		OperationRequest r = new OperationRequest();
 		r.add(operation);
 		
+		RequestHandler rh = new RequestHandler(r);
+		
 		// to server
-		toClients(Settings.requestToString(r));
+		toClients(rh.getMsg());
 		
 		// to clients
-		toServer(Settings.requestToString(r));
+		toServer(rh.getMsg());
 
 	}
 	
@@ -49,7 +52,7 @@ public class NetworkManager implements ICommunicationManager {
 	}
 
 	@Override
-	public void receiveAction(Request r) {
+	public void receiveAction(OperationRequest r) {
 		// add operation to the message queue
 		if (messageHandler == null) {
 			return;
@@ -57,6 +60,12 @@ public class NetworkManager implements ICommunicationManager {
 		while (!r.isEmpty()) {
 			mq.add(r.getFirst(), this.messageHandler);
 		}
+	}
+
+	@Override
+	public void echoAction(String r, ChannelHandlerContext ctx) {
+		// echo the same message
+		ctx.writeAndFlush(r);
 	}
 
 }

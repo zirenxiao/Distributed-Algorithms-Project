@@ -3,15 +3,13 @@ package client;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import main.Main;
-import network.Request;
-import utils.Settings;
-
+import network.RequestHandler;
 
 /**
  * Handles a client-side channel.
  */
 public class ClientHandler extends SimpleChannelInboundHandler<String> {
-    
+	
     @Override
     public void channelActive(final ChannelHandlerContext ctx) {
 
@@ -34,12 +32,11 @@ public class ClientHandler extends SimpleChannelInboundHandler<String> {
 		// redirect to all other clients (children)
 		// and run the action
 				
-		
+		RequestHandler rh = new RequestHandler(msg);
 //		System.out.println("cl:"+msg);
-		Request r = Settings.stringToRequest(msg);
 				
 		Main.getCommunicationManager().toClients(msg);
-		Main.getCommunicationManager().receiveAction(r);
+		rh.doAction(arg0);
 	}
 
     
