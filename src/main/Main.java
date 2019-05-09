@@ -18,7 +18,7 @@ public class Main {
 		System.setProperty("certPath", "certificates/cert.pem");
 		System.setProperty("pkPath", "certificates/key.pem");
 		processArgs(args);
-		CrdtTests.testGetNodePosition();
+//		CrdtTests.testGetNodePosition();
 	}
 	
 	private static void processArgs(String[] args) {
@@ -47,8 +47,8 @@ public class Main {
 		client = new Client();
 		
 		// broadcast send && receive service
-//		new LocalNetworkDiscoveryService().start();
-//		new LocalNetworkDiscoveryBroadcast().start();
+		new LocalNetworkDiscoveryService().start();
+		new LocalNetworkDiscoveryBroadcast().start();
 
 		// initialize the Crdt (Model/Controller) and NotePadGUI (View)
 		init();
