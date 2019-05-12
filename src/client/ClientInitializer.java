@@ -7,13 +7,10 @@ import javax.net.ssl.SSLException;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.handler.codec.DelimiterBasedFrameDecoder;
-import io.netty.handler.codec.Delimiters;
 import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
-import utils.Settings;
 
 /**
  * Creates a newly configured {@link ChannelPipeline} for a new channel.
@@ -24,7 +21,7 @@ public class ClientInitializer extends ChannelInitializer<SocketChannel> {
 
     public ClientInitializer() throws SSLException {
     	// Configure SSL.
-    	File cert = new File(Settings.CERT_PATH);
+    	File cert = new File(System.getProperty("certPath"));
         this.sslCtx = SslContextBuilder.forClient().trustManager(cert).build();
     }
 

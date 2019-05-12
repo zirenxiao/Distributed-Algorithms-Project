@@ -115,7 +115,7 @@ public class ConnectionInfo extends JDialog{
 		// avoid connect to self
 		if (getSelfAddress().contains(address)) {
 			if (port.equals(System.getProperty("port"))) {
-				setConnectionStatus("Cannot connect to self");
+				setConnectStatus("Cannot connect to self");
 				return;
 			}
 		}
@@ -227,9 +227,5 @@ public class ConnectionInfo extends JDialog{
 	
 	private void addToDTM(DefaultTableModel dtm, String[] str) {
 		dtm.addRow(str);
-	}
-	
-	public void setConnectionStatus(String status) {
-		connectStatus.setText(status);
 	}
 }

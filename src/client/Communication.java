@@ -6,6 +6,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import main.ConnectionInfo;
+import main.Main;
 
 public class Communication {
 	private static String host;// = System.getProperty("host", Settings.SERVER_ADDRESS);
@@ -13,10 +14,19 @@ public class Communication {
     private static EventLoopGroup group = new NioEventLoopGroup();
 	private Channel ch;
 	private boolean isConnected = false;
-	public Communication(String host, int port) {
+	
+	
+	public Communication() {
+		
+        
+	}
+	
+	public void connect(String host, int port) {
 		Communication.host = host;
 		Communication.port = port;
-        try {
+		
+		
+		try {
             Bootstrap b = new Bootstrap();
             b.group(group)
              .channel(NioSocketChannel.class)
@@ -26,7 +36,8 @@ public class Communication {
             ConnectionInfo.getInstance().setConnectEnable(false);
             ConnectionInfo.getInstance().setConnectStatus("Connected");
             isConnected = true;
-            
+            Main.getClient().getLagDetector().setRun(true);
+            Main.getClient().getLagDetector().start();
         } catch (Exception e) {
         	disconnect("Conncetion Failed");
         }finally {
@@ -35,12 +46,13 @@ public class Communication {
         }
 	}
 	
-	private void disconnect(String msg) {
+	public void disconnect(String msg) {
 		ConnectionInfo.getInstance().setConnectStatus(msg);
-    	ConnectionInfo.getInstance().setConnectEnable(true);
+//    	ConnectionInfo.getInstance().setConnectEnable(true);
     	isConnected = false;
+    	Main.getClient().getLagDetector().setRun(false);
+    	this.ch.close();
     	group.shutdownGracefully();
-    	group = new NioEventLoopGroup();
 	}
 	
 	public static String getHost() {

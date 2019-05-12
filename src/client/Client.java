@@ -1,39 +1,21 @@
 package client;
 
-import crdt.*;
-import network.ICommunicationManager;
-import tests.CrdtTests;
-
 public class Client {
 
 
-	private Communication comm = null;
+	private Communication comm = new Communication();
+	private LagDetector ld;
 	
     public Client() {
-
-//        guiObject.setBounds(0, 0, 700, 700);
-//        guiObject.setTitle("Notepad");
-//        guiObject.setResizable(false);
-//        guiObject.setVisible(true);
-//        guiObject.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
-
-//        CrdtTests.testCrdtGetNodeByPath();
-//        CrdtTests.testCrdtGetNodeByPath_1();
-//        CrdtTests.testCrdtAddNodeByPath();
-//        CrdtTests.testCrdtAddNodeByPath_1();
-//        CrdtTests.testCrdtAddNodeByPath_2();
-//        CrdtTests.testCrdtRemoteDelete();
-//        CrdtTests.testCrdtRemoteDeleteAdd();
+    	ld = new LagDetector();
     }
     
     public void connectTo(String host, int port) {
-    	comm = new Communication(host, port);
+    	comm.connect(host, port);
     }
     
     public void connectTo(String host, String port) {
-    	comm = new Communication(host, Integer.parseInt(port));
+    	connectTo(host, Integer.parseInt(port));
     }
     
 	public void sentToServer(String str) {
@@ -46,8 +28,15 @@ public class Client {
 			comm.getChannel().writeAndFlush(str);
 		}
 	}
-	
-	public void receiveAction(Object obj) {
-		
+
+	public LagDetector getLagDetector() {
+		return ld;
 	}
+	
+	public void closeConnection() {
+		comm.disconnect("Disconnect");
+	}
+	
+
+
 }

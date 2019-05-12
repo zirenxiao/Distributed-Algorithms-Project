@@ -1,6 +1,5 @@
 package server;
 
-import crdt.Operation;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -10,7 +9,8 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import main.ConnectionInfo;
 import main.Main;
-import utils.Settings;
+import network.OperationRequest;
+import network.RequestHandler;
 
 /**
  * Handles a server-side channel.
@@ -25,7 +25,10 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
     	// group and print in the GUI
     	channels.add(ctx.channel());
     	ConnectionInfo.getInstance().addClientConnection(ctx.channel().remoteAddress().toString());
-    	Main.getCommunicationManager().serverChannelActiveAction();
+//    	Main.getCommunicationManager().serverChannelActiveAction();
+    	OperationRequest r = new OperationRequest(Main.getCRDT().getDoc());
+    	RequestHandler rh = new RequestHandler(r);
+    	ctx.writeAndFlush(rh.getMsg());
     }
 
     @Override
@@ -42,8 +45,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
 //    	Settings.jsonToOperation(Settings.operationToJSON((Operation) msg));
     	
 //    	System.out.println("sv:"+msg);
-    	
-    	Operation op = Settings.stringToOperation(msg);
+		RequestHandler rh = new RequestHandler(msg);
     	
     	for (Channel c: channels) {
     		// first send to all connected clients (children)
@@ -53,8 +55,8 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
     		}
     	}
     	// then send to the server (parent)
-    	Main.getClient().sentToServer(msg);
+    	Main.getCommunicationManager().toServer(msg);
     	// run the action
-    	Main.getCommunicationManager().receiveAction(op);
+    	rh.doAction(ctx);
 	}
 }

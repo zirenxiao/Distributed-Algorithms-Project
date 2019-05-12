@@ -5,8 +5,8 @@ package network;
 
 import crdt.IMessageHandler;
 import crdt.Operation;
+import io.netty.channel.ChannelHandlerContext;
 import main.Main;
-import utils.Settings;
 
 /**
  * @author zirenxiao
@@ -14,7 +14,6 @@ import utils.Settings;
  */
 public class NetworkManager implements ICommunicationManager {
 	private IMessageHandler messageHandler = null;
-	private IMessageHandler serverInitHandler = null;
 	private MessageQueue mq;
 
 	public NetworkManager() {
@@ -23,12 +22,28 @@ public class NetworkManager implements ICommunicationManager {
 
 	@Override
 	public void broadcastMessage(Operation operation) {
+		
+		OperationRequest r = new OperationRequest();
+		r.add(operation);
+		
+		RequestHandler rh = new RequestHandler(r);
+		
 		// to server
-		Main.getClient().sentToServer(Settings.operationToString(operation));
+		toClients(rh.getMsg());
 		
 		// to clients
-		Main.getServer().broadcastToClients(Settings.operationToString(operation));
+		toServer(rh.getMsg());
 
+	}
+	
+	@Override
+	public void toClients(String s) {
+		Main.getServer().broadcastToClients(s);
+	}
+	
+	@Override
+	public void toServer(String s) {
+		Main.getClient().sentToServer(s);
 	}
 
 	@Override
@@ -37,36 +52,20 @@ public class NetworkManager implements ICommunicationManager {
 	}
 
 	@Override
-	public void receiveAction(Operation op) {
+	public void receiveAction(OperationRequest r) {
 		// add operation to the message queue
 		if (messageHandler == null) {
 			return;
 		}
-		mq.add(op, this.messageHandler);
-		
-	}
-
-	@Override
-	public void setServerChannelActiveHandler(IMessageHandler messageHandler) {
-		// TODO Auto-generated method stub
-		this.serverInitHandler = messageHandler;
-		
-	}
-
-	@Override
-	public void serverChannelActiveAction() {
-		// TODO Auto-generated method stub
-		if (serverInitHandler == null) {
-			return;
+		while (!r.isEmpty()) {
+			mq.add(r.getFirst(), this.messageHandler);
 		}
-		serverInitHandler.handle(null);
-		
 	}
 
 	@Override
-	public void isConsistent(String in) {
-		// TODO Auto-generated method stub
-		
+	public void echoAction(String r, ChannelHandlerContext ctx) {
+		// echo the same message
+		ctx.writeAndFlush(r);
 	}
 
 }

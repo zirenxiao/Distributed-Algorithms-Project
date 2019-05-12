@@ -25,3 +25,9 @@ hs_err_pid*
 Distributed-Algorithms-Project.iml
 *.kotlin_module
 .idea/*
+*.DS_Store
+out/artifacts/Distributed_Algorithms_Project_jar/certificates/cert.pem
+out/artifacts/Distributed_Algorithms_Project_jar/certificates/key.pem
+out/artifacts/Distributed_Algorithms_Project_jar/Distributed-Algorithms-Project.jar
+srct/META-INF/MANIFEST.MF
+*.sh
