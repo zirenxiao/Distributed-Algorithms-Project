@@ -345,8 +345,8 @@ public class NotePadGUI extends javax.swing.JFrame {
 //        changedPosition meaning:
 
 //        cursorPosition = textArea.getCaretPosition();
-        System.out.println("cursor was at: "+cursorPosition);
-        System.out.println("changed position: "+changedPosition+" || operation: "+operationType.toString());
+//        System.out.println("cursor was at: "+cursorPosition);
+//        System.out.println("changed position: "+changedPosition+" || operation: "+operationType.toString());
 
         switch(operationType){
             case insert:
@@ -364,7 +364,7 @@ public class NotePadGUI extends javax.swing.JFrame {
         }
 
         outOfBoundaryCheck();
-        System.out.println("cursor now at: "+cursorPosition);
+//        System.out.println("cursor now at: "+cursorPosition);
     }
 
     /**
