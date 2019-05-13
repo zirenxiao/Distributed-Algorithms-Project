@@ -13,6 +13,7 @@ public interface Requests extends Serializable {
 	
 	RequestType getType();
 	void setType(RequestType t);
-	
+	String toJSONString();
+	void fromJSONString(String s);
 
 }

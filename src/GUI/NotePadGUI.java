@@ -50,7 +50,6 @@ public class NotePadGUI extends JFrame {
     private static int cursorPosition = 0;
     private static NotePadGUI instance = null;
     private JTextArea textArea;
-    private boolean modified = false;
 
     public NotePadGUI() {
         initComponents();
@@ -133,11 +132,6 @@ public class NotePadGUI extends JFrame {
                     multipleInsert(insertedText,e.getOffset());
                 } catch (BadLocationException ex) {
                     ex.printStackTrace();
-                }
-                if (!modified) {
-                	ConnectionInfo.getInstance().setConnectEnable(false);
-                	ConnectionInfo.getInstance().setConnectStatus("You have modified the content.");
-                	modified = true;
                 }
             }
 

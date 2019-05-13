@@ -6,75 +6,66 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.Base64;
+import java.util.ArrayList;
 
+import javax.xml.bind.DatatypeConverter;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import client.LagDetector;
+import crdt.Operation;
 import io.netty.channel.ChannelHandlerContext;
 import main.Main;
 
 public class RequestHandler {
 	
-	private String msg;
 	private Requests r;
 	
 	public RequestHandler(String s) {
-		this.msg = s;
-		this.r = (Requests) this.stringToRequest(s);
-	}
-	
-	public RequestHandler(Requests r) {
-		this.msg = this.requestToString(r);
-		this.r = r;
+		RequestType t = getJSONType(s);
+		if (t.equals(RequestType.OPERATION)) {
+			r = new OperationRequest();
+			r.fromJSONString(s);
+		}else if (t.equals(RequestType.PING)) {
+			r = new PingRequest();
+			r.fromJSONString(s);
+		}else if (t.equals(RequestType.PONG)) {
+			r = new PingRequest();
+			r.fromJSONString(s);
+			r.setType(RequestType.PONG);
+		}
 	}
 
-	public String requestToString(Requests o) {
-		return toString(o);
-	}
-	
-	public Object stringToRequest(String o) {
-		return fromString(o);
-	}
-	
-	public void setRequestType(RequestType rt) {
-		this.r.setType(rt);
-		this.msg = this.requestToString(this.r);
-	}
-	
-	private Object fromString(String s){
-		byte [] data = Base64.getDecoder().decode(s);
-		ObjectInputStream ois;
+	private RequestType getJSONType(String s) {
+		System.out.println(s);
 		try {
-			ois = new ObjectInputStream(new ByteArrayInputStream(data));
-			Object o  = ois.readObject();
-			ois.close();
-			return o;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+			JSONObject content;
+			JSONParser parser = new JSONParser();
+			content = (JSONObject) parser.parse(s);
+			RequestType type = RequestType.valueOf(content.get("type").toString());
+			return type;
+		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
 	
-	/** Write the object to a Base64 string. */
-	private String toString(Serializable o){
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		ObjectOutputStream oos;
-		try {
-			oos = new ObjectOutputStream(baos);
-			oos.writeObject(o);
-			oos.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public boolean isNotRedirect() {
+		String s = r.getType().toString();
+		for (NotRedirectType n:NotRedirectType.values()) {
+			
+			if (s.equals(n.toString())) {
+				return true;
+			}
 		}
-		
-		return Base64.getEncoder().encodeToString(baos.toByteArray()); 
+		return false;
 	}
 
 	public String getMsg() {
-		return msg;
+		return r.toJSONString();
 	}
 
 	public Requests getRequest() {
@@ -86,10 +77,15 @@ public class RequestHandler {
 		if (type == RequestType.OPERATION) {
 			Main.getCommunicationManager().receiveAction((OperationRequest) this.r);
 		}else if (type == RequestType.PING) {
-			this.setRequestType(RequestType.PONG);
-			Main.getCommunicationManager().echoAction(this.msg, ctx);
+			r.setType(RequestType.PONG);
+			Main.getCommunicationManager().echoAction(r.toJSONString(), ctx);
 		}else if (type == RequestType.PONG) {
-			Main.getClient().getLagDetector().setCurrentLag((PingRequest) this.r);
+			LagDetector ld = Main.getClient().getLagDetector();
+			
+			long t = ((PingRequest) this.r).getTimeDifference();
+//			System.out.println(t);
+			ld.setCurrentLag(t);
+//			System.out.println("end");
 		}
 	}
 

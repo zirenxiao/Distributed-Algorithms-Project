@@ -31,11 +31,15 @@ public class ClientHandler extends SimpleChannelInboundHandler<String> {
 		// when receive a message from a server (parent)
 		// redirect to all other clients (children)
 		// and run the action
-				
-		RequestHandler rh = new RequestHandler(msg);
+		
 //		System.out.println("cl:"+msg);
 				
-		Main.getCommunicationManager().toClients(msg);
+		RequestHandler rh = new RequestHandler(msg);
+
+		if (!rh.isNotRedirect()) {
+			Main.getCommunicationManager().toClients(msg);
+		}
+		
 		rh.doAction(arg0);
 	}
 

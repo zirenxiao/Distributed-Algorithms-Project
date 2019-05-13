@@ -2,8 +2,7 @@ package network;
 
 import java.io.Serializable;
 
-public enum RequestType implements Serializable{
-    OPERATION,
+public enum NotRedirectType implements Serializable{
     PING,
     PONG
 }

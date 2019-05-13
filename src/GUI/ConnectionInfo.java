@@ -56,7 +56,7 @@ public class ConnectionInfo extends JFrame{
 	
 	private void createMainWindow() {
 		setTitle("Connection Infomation");
-        setVisible(false);
+        setVisible(true);
         setSize(500, 350);
 //        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
