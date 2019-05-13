@@ -59,34 +59,52 @@ public class Crdt implements ICrdt {
      * */
     @Override
     public void sync(Operation operation) {
+        int position = -1;
         if (operation == null) {
             return;
         }
         if (operation.getType() == OperationType.insert) {
             try {
-                doc.addNode(operation.getElement());
+                position = doc.addNode(operation.getElement());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         if (operation.getType() == OperationType.remove) {
             try {
-                doc.removeNode(operation.getElement());
+                position = doc.removeNode(operation.getElement());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        updateEditor();
+        updateEditor(position, operation.getType());
+    }
+
+    public void setDoc(ArrayList<Operation> operations) {
+        if (operations == null) {
+            return;
+        }
+        for (Operation o: operations) {
+            sync(o);
+        }
     }
 
     @Override
-    public void uploadDoc(ArrayList<INode> doc) {
-        // ToDo: upload whole doc if client connects when other have been working already
+    public ArrayList<Operation> getDoc() {
+        ArrayList<Operation> operations = new ArrayList<>();
+        for (INode node : doc.getDoc()) {
+            OperationType type = OperationType.insert;
+            if (node.isRemoved()) {
+                type = OperationType.remove;
+            }
+            operations.add(new Operation(type, (DocElement) node.getElement()));
+        }
+        return operations;
     }
 
     @Override
-    public void updateEditor() {
-        NotePadGUI.updateEditor(doc.toString());
+    public void updateEditor(int changedPosition, OperationType operationType) {
+        NotePadGUI.updateEditor(doc.toString(), changedPosition, operationType);
 //        System.out.println(doc.toString());
     }
 }

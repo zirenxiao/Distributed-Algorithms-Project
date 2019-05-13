@@ -5,14 +5,20 @@ import client.NotePadGUI;
 import crdt.Crdt;
 import network.*;
 import server.Server;
+import tests.CrdtTests;
 
 public class Main {
 	private static Client client;
 	private static Server server;
 	private static ICommunicationManager communicationManager;
+	private static Crdt data;
 
 	public static void main(String[] args) {
+		System.setProperty("broadcastPort", "4445");
+		System.setProperty("certPath", "certificates/cert.pem");
+		System.setProperty("pkPath", "certificates/key.pem");
 		processArgs(args);
+//		CrdtTests.testGetNodePosition();
 	}
 	
 	private static void processArgs(String[] args) {
@@ -24,7 +30,6 @@ public class Main {
 		}else {
 			System.setProperty("port", args[0]);
 		}
-		System.setProperty("broadcastPort", "4445");
 		establishConnections(Integer.parseInt(System.getProperty("port")));
 	}
 	
@@ -51,7 +56,7 @@ public class Main {
 
 	private static void init(){
         communicationManager = new NetworkManager();
-		Crdt data = new Crdt(communicationManager);
+		data = new Crdt(communicationManager);
 		NotePadGUI.init(data);
 	}
 
@@ -66,6 +71,10 @@ public class Main {
 
 	public static ICommunicationManager getCommunicationManager() {
 		return communicationManager;
+	}
+
+	public static Crdt getCRDT() {
+		return data;
 	}
 	
 

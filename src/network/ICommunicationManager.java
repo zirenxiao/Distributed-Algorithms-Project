@@ -2,6 +2,7 @@ package network;
 
 import crdt.IMessageHandler;
 import crdt.Operation;
+import io.netty.channel.ChannelHandlerContext;
 
 public interface ICommunicationManager {
 	// broadcast message to other peers
@@ -10,19 +11,12 @@ public interface ICommunicationManager {
     // set message handler
     void setIncomingMessageHandler(IMessageHandler messageHandler);
     
-    // set message handler when a connection is opened at server side
-    
-    void setServerChannelActiveHandler(IMessageHandler activeHandler);
 
     // actions when a message received
-    void receiveAction(Operation op);
+    void receiveAction(OperationRequest r);
+    void echoAction(String r, ChannelHandlerContext ctx);
     
-    // when a new connection is established, the server will send the whole 
-    // doc to the new connection (client). This method will be called when
-    // the server received a connection. The specific action should be defined
-    // in the activeHandler.
-    void serverChannelActiveAction();
-    
-    void isConsistent(String in);
+    public void toClients(String s);
+    public void toServer(String s);
 
 }

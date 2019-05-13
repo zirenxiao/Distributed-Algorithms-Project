@@ -1,17 +1,15 @@
 package client;
 
-import crdt.Operation;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import main.Main;
-import utils.Settings;
-
+import network.RequestHandler;
 
 /**
  * Handles a client-side channel.
  */
 public class ClientHandler extends SimpleChannelInboundHandler<String> {
-    
+	
     @Override
     public void channelActive(final ChannelHandlerContext ctx) {
 
@@ -34,11 +32,11 @@ public class ClientHandler extends SimpleChannelInboundHandler<String> {
 		// redirect to all other clients (children)
 		// and run the action
 				
+		RequestHandler rh = new RequestHandler(msg);
 //		System.out.println("cl:"+msg);
-		Operation op = Settings.stringToOperation(msg);
 				
-		Main.getServer().broadcastToClients(msg);
-		Main.getCommunicationManager().receiveAction(op);
+		Main.getCommunicationManager().toClients(msg);
+		rh.doAction(arg0);
 	}
 
     
