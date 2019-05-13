@@ -25,3 +25,6 @@ hs_err_pid*
 Distributed-Algorithms-Project.iml
 *.kotlin_module
 .idea/*
+classes/artifacts/*
+*.iml
+src/META-INF/*
