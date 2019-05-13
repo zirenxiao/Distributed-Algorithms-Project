@@ -3,7 +3,7 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 
-public class EntranceDialog {
+public class EntranceDialog extends JDialog {
     private JPanel mainPanel;
     private JButton newFileBtn;
     private JButton connectBtn;
