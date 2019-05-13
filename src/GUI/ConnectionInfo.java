@@ -14,14 +14,16 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 
-public class ConnectionInfo extends JDialog{
+public class ConnectionInfo extends JFrame{
 	
 	private static final long serialVersionUID = 1891198530883212402L;
 	private static ConnectionInfo ci = null;
@@ -41,6 +43,8 @@ public class ConnectionInfo extends JDialog{
 		this.connectToServer();
 		add(mainPanel);
 		this.createMainWindow();
+//		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 	}
 	
 	public static ConnectionInfo getInstance() {
@@ -77,7 +81,7 @@ public class ConnectionInfo extends JDialog{
 		serverAddress = new JTextField(10);
 		serverPort = new JTextField(5);
 		serverAddress.setText("127.0.0.1");
-		serverPort.setText("888");
+		serverPort.setText("800");
 		connect = new JButton("Connect");
 		JPanel connectToServer = new JPanel();
 		JPanel mannualConnect = new JPanel();
@@ -104,13 +108,14 @@ public class ConnectionInfo extends JDialog{
 	}
 	
 	private void connectTo(String address, String port) {
-		NotePadGUI.instance.setVisible(true);
+		NotePadGUI.getInstance().setVisible(true);
 		// avoid connect to self
 		if (getSelfAddress().contains(address)) {
 			if (port.equals(System.getProperty("port"))) {
 				setConnectStatus("Cannot connect to self");
 				return;
 			}
+//			setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		}
 		Main.getClient().connectTo(address, port);
 	}

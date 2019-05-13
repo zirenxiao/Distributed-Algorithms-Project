@@ -3,14 +3,12 @@ package client;
 public class Client {
 
 
-	private Communication comm = new Communication();
+	private Communication comm;
 	private LagDetector ld;
-	
-    public Client() {
-    	ld = new LagDetector();
-    }
     
     public void connectTo(String host, int port) {
+    	ld = new LagDetector();
+    	comm = new Communication();
     	comm.connect(host, port);
     }
     
@@ -37,6 +35,13 @@ public class Client {
 		comm.disconnect("Disconnect");
 	}
 	
+	public String getHost() {
+		return comm.getHost();
+	}
+	
+	public int getPort() {
+		return comm.getPort();
+	}
 
 
 }

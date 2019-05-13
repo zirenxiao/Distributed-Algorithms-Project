@@ -18,7 +18,7 @@ public class Main {
 		System.setProperty("broadcastPort", "4445");
 		System.setProperty("certPath", "certificates/cert.pem");
 		System.setProperty("pkPath", "certificates/key.pem");
-		new EntranceDialog();
+//		new EntranceDialog();
 		establishConnections();
 //		CrdtTests.testGetNodePosition();
 	}
@@ -40,13 +40,9 @@ public class Main {
 		ConnectionInfo.getInstance();
 
 		// initialize the Crdt (Model/Controller) and NotePadGUI (View)
-		init();
-	}
-
-	private static void init(){
-        communicationManager = new NetworkManager();
+		communicationManager = new NetworkManager();
 		data = new Crdt(communicationManager);
-		NotePadGUI.init(data);
+		NotePadGUI.getInstance().init(data);
 	}
 
 

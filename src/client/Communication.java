@@ -2,42 +2,40 @@ package client;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import GUI.ConnectionInfo;
+import GUI.NotePadGUI;
 import main.Main;
 
 public class Communication {
-	private static String host;// = System.getProperty("host", Settings.SERVER_ADDRESS);
-    private static int port;// = Integer.parseInt(System.getProperty("port", Settings.OUT_PORT));
-    private static EventLoopGroup group = new NioEventLoopGroup();
+	private String host;
+    private int port;
+    private EventLoopGroup group;
 	private Channel ch;
 	private boolean isConnected = false;
 	
-	
-	public Communication() {
-		
-        
-	}
-	
 	public void connect(String host, int port) {
-		Communication.host = host;
-		Communication.port = port;
-		
+		this.host = host;
+		this.port = port;
+		group = new NioEventLoopGroup();
 		
 		try {
             Bootstrap b = new Bootstrap();
             b.group(group)
              .channel(NioSocketChannel.class)
+             .option(ChannelOption.SO_KEEPALIVE, true)
              .handler(new ClientInitializer());
             // Start the connection attempt.
-            ch = b.connect(Communication.host, Communication.port).sync().channel();
+            ch = b.connect(this.host, this.port).sync().channel();
             ConnectionInfo.getInstance().setConnectEnable(false);
             ConnectionInfo.getInstance().setConnectStatus("Connected");
             isConnected = true;
             Main.getClient().getLagDetector().setRun(true);
             Main.getClient().getLagDetector().start();
+            NotePadGUI.getInstance().getTextArea().setEditable(true);
         } catch (Exception e) {
         	disconnect("Conncetion Failed");
         }finally {
@@ -48,20 +46,19 @@ public class Communication {
 	
 	public void disconnect(String msg) {
 		ConnectionInfo.getInstance().setConnectStatus(msg);
-//    	ConnectionInfo.getInstance().setConnectEnable(true);
+    	ConnectionInfo.getInstance().setConnectEnable(true);
+		NotePadGUI.getInstance().getTextArea().setEditable(false);
     	isConnected = false;
     	Main.getClient().getLagDetector().setRun(false);
     	this.ch.close();
-    	group.shutdownGracefully();
+//    	group.shutdownGracefully();
 	}
 	
-	public static String getHost() {
+	public String getHost() {
 		return host;
 	}
 
-
-
-	public static int getPort() {
+	public int getPort() {
 		return port;
 	}
 

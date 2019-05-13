@@ -7,6 +7,7 @@
 package server;
 
 import java.net.BindException;
+import java.util.concurrent.ThreadLocalRandom;
 
 import javax.net.ssl.SSLException;
 
@@ -21,10 +22,11 @@ public class Server extends Thread{
 	private Communication com;
 	
 	public void run() {
-		for (int i=8000; i<=8200; i++) {
+		while (true){
 			try {
-				System.setProperty("port", String.valueOf(i));
-				com = new Communication(i);
+				System.setProperty("port", String.valueOf(ThreadLocalRandom.current().nextInt(8000, 9000)));
+				System.out.println("Try to listening at port "+System.getProperty("port"));
+				com = new Communication(Integer.parseInt(System.getProperty("port")));
 			} catch (SSLException | InterruptedException e) {
 				// TODO Auto-generated catch block
 				System.err.println("Server start failed, with error '" +e.getMessage()+"'. System exit.");

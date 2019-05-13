@@ -11,13 +11,14 @@ import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
+import main.Main;
 
 /**
  * Creates a newly configured {@link ChannelPipeline} for a new channel.
  */
 public class ClientInitializer extends ChannelInitializer<SocketChannel> {
 
-    private final SslContext sslCtx;
+    private SslContext sslCtx;
 
     public ClientInitializer() throws SSLException {
     	// Configure SSL.
@@ -28,7 +29,7 @@ public class ClientInitializer extends ChannelInitializer<SocketChannel> {
     @Override
     public void initChannel(SocketChannel ch) throws Exception {
         ChannelPipeline pipeline = ch.pipeline();
-        pipeline.addLast(sslCtx.newHandler(ch.alloc(), Communication.getHost(), Communication.getPort()));
+        pipeline.addLast(sslCtx.newHandler(ch.alloc(), Main.getClient().getHost(), Main.getClient().getPort()));
 //        pipeline.addLast(new DelimiterBasedFrameDecoder(8192, Delimiters.lineDelimiter()));
         pipeline.addLast(new StringDecoder());
         pipeline.addLast(new StringEncoder());
