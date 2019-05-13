@@ -17,22 +17,22 @@ public class LagDetector extends Thread{
 	}
 	
 	public void run() {
-//		while (run) {
-//			try {
-//				sleep(1000);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			if (failCount >= 5) {
-//				Main.getClient().closeConnection();
-//				break;
-//			}
-//			PingRequest p = new PingRequest();
-//			RequestHandler rh = new RequestHandler(p);
-//			Main.getClient().sentToServer(rh.getMsg());
-//			failCount++;
-//		}
+		while (run) {
+			try {
+				sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			if (failCount >= 5) {
+				Main.getClient().closeConnection();
+				break;
+			}
+			PingRequest p = new PingRequest();
+			RequestHandler rh = new RequestHandler(p);
+			Main.getClient().sentToServer(rh.getMsg());
+			failCount++;
+		}
 		
 	}
 	

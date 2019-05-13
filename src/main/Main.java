@@ -18,32 +18,16 @@ public class Main {
 		System.setProperty("broadcastPort", "4445");
 		System.setProperty("certPath", "certificates/cert.pem");
 		System.setProperty("pkPath", "certificates/key.pem");
-		processArgs(args);
+		new EntranceDialog();
+		establishConnections();
 //		CrdtTests.testGetNodePosition();
 	}
 	
-	private static void processArgs(String[] args) {
-		// args[0] = server port
-		if (args.length==0) {
-			System.err.println("You have to add server port at running.");
-			System.err.println("Usage: /app_name port");
-			System.exit(0);
-		}else {
-			System.setProperty("port", args[0]);
-		}
-		new EntranceDialog();
-		establishConnections(Integer.parseInt(System.getProperty("port")));
-	}
-	
-	/**
-	 * @param selfPort A port to allow connections from other clients
-	 */
-	private static void establishConnections(int selfPort) {
-		// show connection info
-		ConnectionInfo.getInstance();
+	private static void establishConnections() {
+		
 		
 		// create a thread to run the server
-		server = new Server(selfPort);
+		server = new Server();
 		server.start();
 
 		client = new Client();
@@ -51,6 +35,9 @@ public class Main {
 		// broadcast send && receive service
 		new LocalNetworkDiscoveryService().start();
 		new LocalNetworkDiscoveryBroadcast().start();
+		
+		// show connection info
+		ConnectionInfo.getInstance();
 
 		// initialize the Crdt (Model/Controller) and NotePadGUI (View)
 		init();
