@@ -5,7 +5,7 @@ import io.netty.channel.Channel;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
-import main.ConnectionInfo;
+import GUI.ConnectionInfo;
 import main.Main;
 
 public class Communication {
