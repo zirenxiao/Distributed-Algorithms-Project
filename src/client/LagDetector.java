@@ -1,6 +1,6 @@
 package client;
 
-import main.ConnectionInfo;
+import GUI.ConnectionInfo;
 import main.Main;
 import network.PingRequest;
 import network.RequestHandler;

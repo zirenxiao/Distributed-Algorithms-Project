@@ -1,4 +1,4 @@
-package client;
+package GUI;
 
 import crdt.Crdt;
 import crdt.OperationType;
@@ -41,6 +41,7 @@ public class NotePadGUI extends javax.swing.JFrame {
     private static Crdt data;
     private static boolean isFromOthers = false;
     private static int cursorPosition = 0;
+    protected static NotePadGUI instance;
 
     private NotePadGUI() {
         initComponents();
@@ -93,7 +94,7 @@ public class NotePadGUI extends javax.swing.JFrame {
             JTextArea editArea = (JTextArea)e.getSource();
             try {
                 int caretpos = editArea.getCaretPosition();
-                System.out.println("cursor position changed: " + caretpos);
+//                System.out.println("cursor position changed: " + caretpos);
                 cursorPosition = caretpos;
             }
             catch(Exception ex) {
@@ -405,7 +406,12 @@ public class NotePadGUI extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new NotePadGUI().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> setupGUI());
+    }
+
+    private static void setupGUI(){
+        instance = new NotePadGUI();
+        instance.setVisible(false);
     }
 
     private static javax.swing.JTextArea textArea;

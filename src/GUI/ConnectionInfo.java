@@ -1,4 +1,6 @@
-package main;
+package GUI;
+
+import main.Main;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -86,23 +88,13 @@ public class ConnectionInfo extends JDialog{
 		mannualConnect.add(new JLabel("Port"));
 		mannualConnect.add(serverPort);
 		mannualConnect.add(connect);
-		connect.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				connectTo(serverAddress.getText(), serverPort.getText());
-			}
-        });
+		connect.addActionListener(e -> connectTo(serverAddress.getText(), serverPort.getText()));
 		
 		connectToServer.add(mannualConnect);
 		
 		JPanel serverStatus = new JPanel();
 		JButton resetServerTable = new JButton("Reset Server Table");
-		resetServerTable.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				resetAvailabelServer();
-			}
-        });
+		resetServerTable.addActionListener(e -> resetAvailabelServer());
 		serverStatus.add(new JLabel("Server Port: "+System.getProperty("port")));
 		serverStatus.add(resetServerTable);
 		connectStatus = new JLabel("Not Connected");
@@ -112,6 +104,7 @@ public class ConnectionInfo extends JDialog{
 	}
 	
 	private void connectTo(String address, String port) {
+		NotePadGUI.instance.setVisible(true);
 		// avoid connect to self
 		if (getSelfAddress().contains(address)) {
 			if (port.equals(System.getProperty("port"))) {

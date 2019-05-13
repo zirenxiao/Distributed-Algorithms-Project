@@ -7,7 +7,7 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 
 import io.netty.util.concurrent.GlobalEventExecutor;
-import main.ConnectionInfo;
+import GUI.ConnectionInfo;
 import main.Main;
 import network.OperationRequest;
 import network.RequestHandler;

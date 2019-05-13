@@ -3,7 +3,7 @@ package network;
 import java.io.IOException;
 import java.net.*;
 
-import main.ConnectionInfo;
+import GUI.ConnectionInfo;
 
 public class LocalNetworkDiscoveryService extends Thread {
 	 

@@ -1,6 +1,6 @@
 package crdt;
 
-import client.NotePadGUI;
+import GUI.NotePadGUI;
 import network.ICommunicationManager;
 
 import java.util.ArrayList;

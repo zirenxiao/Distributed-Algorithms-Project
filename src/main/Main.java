@@ -1,11 +1,12 @@
 package main;
 
+import GUI.ConnectionInfo;
+import GUI.EntranceDialog;
 import client.Client;
-import client.NotePadGUI;
+import GUI.NotePadGUI;
 import crdt.Crdt;
 import network.*;
 import server.Server;
-import tests.CrdtTests;
 
 public class Main {
 	private static Client client;
@@ -30,6 +31,7 @@ public class Main {
 		}else {
 			System.setProperty("port", args[0]);
 		}
+		new EntranceDialog();
 		establishConnections(Integer.parseInt(System.getProperty("port")));
 	}
 	
@@ -38,7 +40,7 @@ public class Main {
 	 */
 	private static void establishConnections(int selfPort) {
 		// show connection info
-		ConnectionInfo.getInstance();
+//		ConnectionInfo.getInstance();
 		
 		// create a thread to run the server
 		server = new Server(selfPort);
