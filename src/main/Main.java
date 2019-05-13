@@ -40,7 +40,7 @@ public class Main {
 	 */
 	private static void establishConnections(int selfPort) {
 		// show connection info
-//		ConnectionInfo.getInstance();
+		ConnectionInfo.getInstance();
 		
 		// create a thread to run the server
 		server = new Server(selfPort);

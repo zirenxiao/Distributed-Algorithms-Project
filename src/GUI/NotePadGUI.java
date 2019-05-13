@@ -45,6 +45,7 @@ public class NotePadGUI extends javax.swing.JFrame {
 
     private NotePadGUI() {
         initComponents();
+        setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     }
 
     /**
@@ -199,7 +200,8 @@ public class NotePadGUI extends javax.swing.JFrame {
 
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
         // TODO add your handling code here:
-        System.exit(0);
+
+//        System.exit(0);
     }//GEN-LAST:event_exitActionPerformed
 
     private void newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileActionPerformed

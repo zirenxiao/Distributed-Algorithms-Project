@@ -52,7 +52,7 @@ public class ConnectionInfo extends JDialog{
 	
 	private void createMainWindow() {
 		setTitle("Connection Infomation");
-        setVisible(true);
+        setVisible(false);
         setSize(500, 350);
 //        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
