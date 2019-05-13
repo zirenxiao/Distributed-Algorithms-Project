@@ -35,6 +35,9 @@ public class RequestHandler {
 			r = new PingRequest();
 			r.fromJSONString(s);
 			r.setType(RequestType.PONG);
+		}else if (t.equals(RequestType.PEER)) {
+			r = new PeerListRequest();
+			r.fromJSONString(s);
 		}
 	}
 

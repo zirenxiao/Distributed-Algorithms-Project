@@ -4,5 +4,6 @@ import java.io.Serializable;
 
 public enum NotRedirectType implements Serializable{
     PING,
-    PONG
+    PONG,
+    PEER
 }

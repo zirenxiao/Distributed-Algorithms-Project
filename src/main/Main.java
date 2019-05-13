@@ -13,6 +13,7 @@ public class Main {
 	private static Server server;
 	private static ICommunicationManager communicationManager;
 	private static Crdt data;
+	private static HostBroadCast hb;
 
 	public static void main(String[] args) {
 		System.setProperty("broadcastPort", "4445");
@@ -30,19 +31,25 @@ public class Main {
 		server = new Server();
 		server.start();
 
+		// show connection info
+		ConnectionInfo.getInstance();
+		
+		
 		client = new Client();
 		
 		// broadcast send && receive service
 		new LocalNetworkDiscoveryService().start();
 		new LocalNetworkDiscoveryBroadcast().start();
 		
-		// show connection info
-		ConnectionInfo.getInstance();
+		
 
 		// initialize the Crdt (Model/Controller) and NotePadGUI (View)
 		communicationManager = new NetworkManager();
 		data = new Crdt(communicationManager);
 		NotePadGUI.getInstance().init(data);
+		
+		hb = new HostBroadCast();
+		hb.start();
 	}
 
 
@@ -60,6 +67,10 @@ public class Main {
 
 	public static Crdt getCRDT() {
 		return data;
+	}
+
+	public static HostBroadCast getHostBroadCast() {
+		return hb;
 	}
 	
 

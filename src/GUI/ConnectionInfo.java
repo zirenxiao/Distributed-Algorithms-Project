@@ -23,7 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 
-public class ConnectionInfo extends JFrame{
+public class ConnectionInfo{
 	
 	private static final long serialVersionUID = 1891198530883212402L;
 	private static ConnectionInfo ci = null;
@@ -35,16 +35,18 @@ public class ConnectionInfo extends JFrame{
 	private JButton connect;
 	private JTextField serverAddress;
 	private JTextField serverPort;
+	private JFrame main;
 
 	public ConnectionInfo() {
+		main = new JFrame();
 		mainPanel = setupMainPanel();
 		this.connectionTable();
 		this.availableConnectionTable();
 		this.connectToServer();
-		add(mainPanel);
+		main.add(mainPanel);
 		this.createMainWindow();
 //		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-		setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+		main.setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 	}
 	
 	public static ConnectionInfo getInstance() {
@@ -55,9 +57,9 @@ public class ConnectionInfo extends JFrame{
 	}
 	
 	private void createMainWindow() {
-		setTitle("Connection Infomation");
-        setVisible(true);
-        setSize(500, 350);
+		main.setTitle("Connection Infomation");
+		main.setVisible(true);
+		main.setSize(500, 350);
 //        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 	
@@ -225,5 +227,15 @@ public class ConnectionInfo extends JFrame{
 	
 	private void addToDTM(DefaultTableModel dtm, String[] str) {
 		dtm.addRow(str);
+	}
+
+	public void setVisible(boolean b) {
+		// TODO Auto-generated method stub
+		main.setVisible(b);
+	}
+
+	public boolean isVisible() {
+		// TODO Auto-generated method stub
+		return main.isVisible();
 	}
 }
