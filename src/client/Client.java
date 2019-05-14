@@ -3,13 +3,15 @@ package client;
 public class Client {
 
 
-	private Communication comm;
+//	private Communication comm;
 	private LagDetector ld;
+	private Connection con;
     
     public void connectTo(String host, int port) {
     	ld = new LagDetector();
-    	comm = new Communication();
-    	comm.connect(host, port);
+//    	comm = new Communication();
+//    	comm.connect(host, port);
+		con = new Connection(host, port);
     }
     
     public void connectTo(String host, String port) {
@@ -17,14 +19,10 @@ public class Client {
     }
     
 	public void sentToServer(String str) {
-		if (comm == null) {
-			return;
+		if (con!=null) {
+			con.writeMsg(str);
 		}
 		
-		if (comm.isConnected()) {
-//			System.out.println("STS:"+str);
-			comm.getChannel().writeAndFlush(str);
-		}
 	}
 
 	public LagDetector getLagDetector() {
@@ -32,15 +30,7 @@ public class Client {
 	}
 	
 	public void closeConnection() {
-		comm.disconnect("Disconnect");
-	}
-	
-	public String getHost() {
-		return comm.getHost();
-	}
-	
-	public int getPort() {
-		return comm.getPort();
+		this.con.closeCon();
 	}
 
 
