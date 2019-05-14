@@ -25,12 +25,18 @@ public class Operation  implements Serializable{
 
     private void replaceTreePathByPathSting() {
         TreePath path = element.getPath();
-        element.setPathString(path.toString());
-        element.setPath(null);
+        if (path != null) {
+            element.setPathString(path.toString());
+            element.setPath(null);
+        } else {
+            element.setPathString("");
+        }
     }
 
     private void restoreTreePath() {
         String pathStr = element.getPathString();
-        element.setPath(new TreePath(pathStr));
+        if (!pathStr.isEmpty()) {
+            element.setPath(new TreePath(pathStr));
+        }
     }
 }
