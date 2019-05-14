@@ -48,6 +48,7 @@ public class Crdt implements ICrdt {
         if (node == null) {
             return;
         }
+        
         Operation operation = new Operation(type, (DocElement) node.getElement());
         if (comm != null) {
             comm.broadcastMessage(operation);

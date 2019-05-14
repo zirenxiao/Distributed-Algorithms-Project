@@ -57,15 +57,25 @@ public class OperationRequest implements Requests {
 	@Override
 	public String toJSONString() {
 		JSONObject obj = new JSONObject();
+		
+//		System.out.println("Path:"+op.getElement().getPath());
 		obj.put("type", type.toString());
 		
 		JSONObject oper = new JSONObject();
 		oper.put("symbol", String.valueOf(op.getElement().getValue()));
 		oper.put("timestamp", op.getElement().getTimestamp().toString());
-		oper.put("path", toSerilizedString(op.getElement().getPath()));
+//		oper.put("path", toSerilizedString(op.getElement().getPath()));
+		if (op.getElement().getPath()==null) {
+			oper.put("path", null);
+		}else {
+			oper.put("path", op.getElement().getPath().toString());
+		}
+		
 		oper.put("type", op.getType().toString());
 		
 		obj.put("operation", oper);
+		
+		
 		return obj.toJSONString();
 	}
 	
@@ -80,7 +90,16 @@ public class OperationRequest implements Requests {
 			JSONObject operation = (JSONObject) content.get("operation");
 			
 			DocElement d = new DocElement(operation.get("symbol").toString().charAt(0));
-			d.setPath((TreePath) fromString(operation.get("path").toString()));
+//			d.setPath((TreePath) fromString(operation.get("path").toString()));
+			
+//			d.setPathString(operation.get("path").toString());
+			if (operation.get("path")==null) {
+				d.setPath(new TreePath());
+			}else {
+				d.setPath(new TreePath(operation.get("path").toString()));
+			}
+			
+			
 			d.setTimestamp(Timestamp.valueOf(operation.get("timestamp").toString()));
 			op = new Operation(OperationType.valueOf(operation.get("type").toString()), d);
 //			op = (Operation) fromString(content.get("operation").toString());

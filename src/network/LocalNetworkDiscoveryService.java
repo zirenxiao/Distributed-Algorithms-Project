@@ -15,7 +15,7 @@ public class LocalNetworkDiscoveryService extends Thread {
 			socket = new DatagramSocket(Integer.parseInt(System.getProperty("broadcastPort")));
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
-			System.out.println(System.getProperty("broadcastPort") + " is in use.");
+			System.out.println("Port "+System.getProperty("broadcastPort") + " is in use. Local Network Discovery Service disabled.");
 		}
     }
  
@@ -26,7 +26,7 @@ public class LocalNetworkDiscoveryService extends Thread {
 				socket.receive(packet);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
              
             InetAddress address = packet.getAddress();

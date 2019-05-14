@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 import crdt.IMessageHandler;
 import crdt.Operation;
-import io.netty.channel.ChannelHandlerContext;
 import main.Main;
+import server.Connection;
 
 /**
  * @author zirenxiao
@@ -36,6 +36,8 @@ public class NetworkManager implements ICommunicationManager {
 		
 		RequestHandler rh = new RequestHandler(r.toJSONString());
 		
+		System.out.println("Sending:"+r.toJSONString());
+		
 		// to server
 		toClients(rh.getMsg());
 		
@@ -46,38 +48,12 @@ public class NetworkManager implements ICommunicationManager {
 	
 	@Override
 	public void toClients(String s) {
-		toClientList.add(s);
-		if (!toClient) {
-			excToClient();
-		}
+		Main.getServer().broadcastToClients(s);
 	}
 	
 	@Override
 	public void toServer(String s) {
-		toServerList.add(s);
-		if (!toServer) {
-			excToServer();
-		}
-	}
-	
-	private void excToServer() {
-		toServer = true;
-		while (!toServerList.isEmpty()) {
-			String s = toServerList.get(0);
-			toServerList.remove(0);
-			Main.getClient().sentToServer(s);
-		}
-		toServer = false;
-	}
-	
-	private void excToClient() {
-		toClient = true;
-		while (!toClientList.isEmpty()) {
-			String s = toClientList.get(0);
-			toClientList.remove(0);
-			Main.getServer().broadcastToClients(s);
-		}
-		toClient = false;
+		Main.getClient().sentToServer(s);
 	}
 
 	@Override
@@ -95,9 +71,11 @@ public class NetworkManager implements ICommunicationManager {
 	}
 
 	@Override
-	public void echoAction(String r, ChannelHandlerContext ctx) {
+	public void echoAction(String r, Connection c) {
 		// echo the same message
-		ctx.writeAndFlush(r);
+//		ctx.writeAndFlush(r + "\r\n");
+		c.writeMsg(r);
 	}
+	
 
 }

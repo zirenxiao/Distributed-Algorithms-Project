@@ -1,23 +1,12 @@
 package network;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-
-import javax.xml.bind.DatatypeConverter;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import client.LagDetector;
-import crdt.Operation;
-import io.netty.channel.ChannelHandlerContext;
 import main.Main;
+import server.Connection;
 
 public class RequestHandler {
 	
@@ -42,7 +31,7 @@ public class RequestHandler {
 	}
 
 	private RequestType getJSONType(String s) {
-		System.out.println(s);
+//		System.out.println(s);
 		try {
 			JSONObject content;
 			JSONParser parser = new JSONParser();
@@ -50,8 +39,8 @@ public class RequestHandler {
 			RequestType type = RequestType.valueOf(content.get("type").toString());
 			return type;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("Caused str:"+s+"||Issue:"+e.getErrorType());
+//			e.printStackTrace();
 		}
 		return null;
 	}
@@ -75,13 +64,13 @@ public class RequestHandler {
 		return r;
 	}
 	
-	public void doAction(ChannelHandlerContext ctx) {
+	public void doAction(Connection c) {
 		RequestType type = r.getType();
 		if (type == RequestType.OPERATION) {
 			Main.getCommunicationManager().receiveAction((OperationRequest) this.r);
 		}else if (type == RequestType.PING) {
 			r.setType(RequestType.PONG);
-			Main.getCommunicationManager().echoAction(r.toJSONString(), ctx);
+			Main.getCommunicationManager().echoAction(r.toJSONString(), c);
 		}else if (type == RequestType.PONG) {
 			LagDetector ld = Main.getClient().getLagDetector();
 			

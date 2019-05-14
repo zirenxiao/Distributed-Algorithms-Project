@@ -72,6 +72,7 @@ public class TreePath implements Serializable{
 //                str.append(" ");
             }
         }
+//        System.out.println("str:"+str.toString());
         return str.toString();
     }
 

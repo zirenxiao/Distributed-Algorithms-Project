@@ -11,7 +11,8 @@ public class Operation  implements Serializable{
     public Operation(OperationType type, DocElement element) {
         this.type = type;
         this.element = element;
-        replaceTreePathByPathSting();
+//        System.out.println(element.getPathString());
+//        replaceTreePathByPathSting();
     }
 
     public OperationType getType() {
@@ -19,18 +20,19 @@ public class Operation  implements Serializable{
     }
 
     public DocElement getElement() {
-        restoreTreePath();
+//        restoreTreePath();
         return element;
     }
+//    private void replaceTreePathByPathSting() {
+//        TreePath path = element.getPath();
+//        
+//        element.setPathString(path.toString());
+//        element.setPath(null);
+//    }
+//
+//    private void restoreTreePath() {
+//        String pathStr = element.getPathString();
+//        element.setPath(new TreePath(pathStr));
+//    }
 
-    private void replaceTreePathByPathSting() {
-        TreePath path = element.getPath();
-        element.setPathString(path.toString());
-        element.setPath(null);
-    }
-
-    private void restoreTreePath() {
-        String pathStr = element.getPathString();
-        element.setPath(new TreePath(pathStr));
-    }
 }

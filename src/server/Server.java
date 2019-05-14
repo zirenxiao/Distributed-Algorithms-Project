@@ -6,47 +6,44 @@
 
 package server;
 
-import java.net.BindException;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.ArrayList;
 
-import javax.net.ssl.SSLException;
-
-import io.netty.channel.Channel;
-import io.netty.channel.group.ChannelGroup;
-
-/**
- *
- * @author NAFIS
- */
 public class Server extends Thread{
-	private Communication com;
+	private Listener listener;
+	private ArrayList<Connection> conList;
+	private Handler handler;
 	
-	public void run() {
-		while (true){
-			try {
-				System.setProperty("port", String.valueOf(ThreadLocalRandom.current().nextInt(8000, 9000)));
-				System.out.println("Try to listening at port "+System.getProperty("port"));
-				com = new Communication(Integer.parseInt(System.getProperty("port")));
-			} catch (SSLException | InterruptedException e) {
-				// TODO Auto-generated catch block
-				System.err.println("Server start failed, with error '" +e.getMessage()+"'. System exit.");
-				System.exit(0);
-			} catch(BindException e) {
-				continue;
-			}
-		}
-		
+	public Server() {
+		listener = new Listener();
+		conList = new ArrayList<Connection>();
+		handler = new Handler();
+	}
+	
+	public void inComingCon(Connection s) {
+		System.out.println("New connection connected.");
+		conList.add(s);
 	}
 	
     public void broadcastToClients(String str) {
-    	ChannelGroup channels = ServerHandler.channels;
-    	for (Channel c: channels) {
-//    		System.out.println("BTC:"+str);
-    		c.writeAndFlush(str);
-    	}
+    	broadcastToClients(str, null);
     }
     
-    public void receiveAction(Object obj) {
-		
+    /** Broadcast message except a connection
+     * @param str
+     * @param con
+     */
+    public void broadcastToClients(String str, Connection con) {
+    	for (Connection c: conList) {
+//    		System.out.println("BTC:"+str);
+    		if (con!=null && c.equals(con)) {
+    			continue;
+    		}
+    		c.writeMsg(str);
+    	}
+    }
+
+	public Handler getHandler() {
+		return handler;
 	}
+    
 }
