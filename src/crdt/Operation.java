@@ -23,7 +23,6 @@ public class Operation  implements Serializable{
 //        restoreTreePath();
         return element;
     }
-
 //    private void replaceTreePathByPathSting() {
 //        TreePath path = element.getPath();
 //        
@@ -35,4 +34,5 @@ public class Operation  implements Serializable{
 //        String pathStr = element.getPathString();
 //        element.setPath(new TreePath(pathStr));
 //    }
+
 }
