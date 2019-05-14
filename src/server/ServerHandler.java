@@ -8,6 +8,7 @@ import io.netty.channel.group.DefaultChannelGroup;
 
 import io.netty.util.concurrent.GlobalEventExecutor;
 import GUI.ConnectionInfo;
+import crdt.Operation;
 import main.Main;
 import network.OperationRequest;
 import network.RequestHandler;
@@ -26,9 +27,12 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
     	channels.add(ctx.channel());
     	ConnectionInfo.getInstance().addClientConnection(ctx.channel().remoteAddress().toString());
 //    	Main.getCommunicationManager().serverChannelActiveAction();
-    	OperationRequest r = new OperationRequest(Main.getCRDT().getDoc());
-    	RequestHandler rh = new RequestHandler(r);
-    	ctx.writeAndFlush(rh.getMsg());
+    	for (Operation o:Main.getCRDT().getDoc()) {
+    		OperationRequest r = new OperationRequest(o);
+        	RequestHandler rh = new RequestHandler(r.toJSONString());
+        	ctx.writeAndFlush(rh.getMsg());
+    	}
+    	
     }
 
     @Override
@@ -45,17 +49,23 @@ public class ServerHandler extends SimpleChannelInboundHandler<String> {
 //    	Settings.jsonToOperation(Settings.operationToJSON((Operation) msg));
     	
 //    	System.out.println("sv:"+msg);
-		RequestHandler rh = new RequestHandler(msg);
     	
-    	for (Channel c: channels) {
-    		// first send to all connected clients (children)
-    		if (c != ctx.channel()) {
-    			// make sure don't send back to the client
-    			c.writeAndFlush(msg);
-    		}
-    	}
-    	// then send to the server (parent)
-    	Main.getCommunicationManager().toServer(msg);
+		RequestHandler rh = new RequestHandler(msg);
+		
+		
+		if (!rh.isNotRedirect()) {
+			for (Channel c: channels) {
+	    		// first send to all connected clients (children)
+	    		if (c != ctx.channel()) {
+	    			// make sure don't send back to the client
+	    			c.writeAndFlush(msg);
+	    		}
+	    	}
+	    	// then send to the server (parent)
+	    	Main.getCommunicationManager().toServer(msg);
+		}
+    	
+    	
     	// run the action
     	rh.doAction(ctx);
 	}

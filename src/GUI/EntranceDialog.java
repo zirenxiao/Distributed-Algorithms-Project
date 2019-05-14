@@ -3,7 +3,7 @@ package GUI;
 import javax.swing.*;
 import java.awt.*;
 
-public class EntranceDialog extends JDialog {
+public class EntranceDialog extends JFrame {
     private JPanel mainPanel;
     private JButton newFileBtn;
     private JButton connectBtn;
@@ -29,10 +29,11 @@ public class EntranceDialog extends JDialog {
         setTitle("CRDT Application - Collaborative Writing");
         setVisible(true);
         setSize(300, 100);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     private void setNewFile(){
-        NotePadGUI.instance.setVisible(true);
+        NotePadGUI.getInstance().setVisible(true);
         hideDialog();
     }
 
@@ -42,7 +43,7 @@ public class EntranceDialog extends JDialog {
     }
 
     private void hideDialog(){
-//        setVisible(false);
+        setVisible(false);
     }
 
 }

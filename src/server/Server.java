@@ -6,6 +6,9 @@
 
 package server;
 
+import java.net.BindException;
+import java.util.concurrent.ThreadLocalRandom;
+
 import javax.net.ssl.SSLException;
 
 import io.netty.channel.Channel;
@@ -16,20 +19,23 @@ import io.netty.channel.group.ChannelGroup;
  * @author NAFIS
  */
 public class Server extends Thread{
-	private int port;
 	private Communication com;
 	
-	public Server(int port) {
-		this.port = port;
-	}
-	
 	public void run() {
-		try {
-			com = new Communication(port);
-		} catch (SSLException | InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		while (true){
+			try {
+				System.setProperty("port", String.valueOf(ThreadLocalRandom.current().nextInt(8000, 9000)));
+				System.out.println("Try to listening at port "+System.getProperty("port"));
+				com = new Communication(Integer.parseInt(System.getProperty("port")));
+			} catch (SSLException | InterruptedException e) {
+				// TODO Auto-generated catch block
+				System.err.println("Server start failed, with error '" +e.getMessage()+"'. System exit.");
+				System.exit(0);
+			} catch(BindException e) {
+				continue;
+			}
 		}
+		
 	}
 	
     public void broadcastToClients(String str) {

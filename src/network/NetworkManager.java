@@ -3,6 +3,8 @@
  */
 package network;
 
+import java.util.ArrayList;
+
 import crdt.IMessageHandler;
 import crdt.Operation;
 import io.netty.channel.ChannelHandlerContext;
@@ -15,18 +17,24 @@ import main.Main;
 public class NetworkManager implements ICommunicationManager {
 	private IMessageHandler messageHandler = null;
 	private MessageQueue mq;
+	private ArrayList<String> toServerList;
+	private boolean toServer = false;
+	private ArrayList<String> toClientList;
+	private boolean toClient = false;
 
 	public NetworkManager() {
 		mq = new MessageQueue();
+		toServerList = new ArrayList<String>();
+		toClientList = new ArrayList<String>();
+		
 	}
 
 	@Override
 	public void broadcastMessage(Operation operation) {
 		
-		OperationRequest r = new OperationRequest();
-		r.add(operation);
+		OperationRequest r = new OperationRequest(operation);
 		
-		RequestHandler rh = new RequestHandler(r);
+		RequestHandler rh = new RequestHandler(r.toJSONString());
 		
 		// to server
 		toClients(rh.getMsg());
@@ -38,12 +46,38 @@ public class NetworkManager implements ICommunicationManager {
 	
 	@Override
 	public void toClients(String s) {
-		Main.getServer().broadcastToClients(s);
+		toClientList.add(s);
+		if (!toClient) {
+			excToClient();
+		}
 	}
 	
 	@Override
 	public void toServer(String s) {
-		Main.getClient().sentToServer(s);
+		toServerList.add(s);
+		if (!toServer) {
+			excToServer();
+		}
+	}
+	
+	private void excToServer() {
+		toServer = true;
+		while (!toServerList.isEmpty()) {
+			String s = toServerList.get(0);
+			toServerList.remove(0);
+			Main.getClient().sentToServer(s);
+		}
+		toServer = false;
+	}
+	
+	private void excToClient() {
+		toClient = true;
+		while (!toClientList.isEmpty()) {
+			String s = toClientList.get(0);
+			toClientList.remove(0);
+			Main.getServer().broadcastToClients(s);
+		}
+		toClient = false;
 	}
 
 	@Override
@@ -57,9 +91,7 @@ public class NetworkManager implements ICommunicationManager {
 		if (messageHandler == null) {
 			return;
 		}
-		while (!r.isEmpty()) {
-			mq.add(r.getFirst(), this.messageHandler);
-		}
+		mq.add(r.getOperation(), this.messageHandler);
 	}
 
 	@Override

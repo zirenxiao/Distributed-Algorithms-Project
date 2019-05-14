@@ -2,20 +2,23 @@ package GUI;
 
 import crdt.Crdt;
 import crdt.OperationType;
-
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.FileDialog;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -30,9 +33,13 @@ import java.io.IOException;
  * @author NAFIS, ALLEN
  */
 
-public class NotePadGUI extends javax.swing.JFrame {
+public class NotePadGUI extends JFrame {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -1350591122130493068L;
+	/**
      * Creates new form NotePadGUI
      */
 
@@ -41,11 +48,19 @@ public class NotePadGUI extends javax.swing.JFrame {
     private static Crdt data;
     private static boolean isFromOthers = false;
     private static int cursorPosition = 0;
-    protected static NotePadGUI instance;
+    private static NotePadGUI instance = null;
+    private JTextArea textArea;
 
-    private NotePadGUI() {
+    public NotePadGUI() {
         initComponents();
-        setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+//        setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
+    }
+    
+    public static NotePadGUI getInstance() {
+    	if (instance==null) {
+    		instance = new NotePadGUI();
+    	}
+    	return instance;
     }
 
     /**
@@ -59,7 +74,7 @@ public class NotePadGUI extends javax.swing.JFrame {
 
         JPanel jPanel1 = new JPanel();
         JScrollPane jScrollPane1 = new JScrollPane();
-        textArea = new javax.swing.JTextArea();
+        textArea = new JTextArea();
         JMenuBar jMenuBar1 = new JMenuBar();
         JMenu file = new JMenu();
         //JMenuItem newFile = new JMenuItem();
@@ -71,9 +86,11 @@ public class NotePadGUI extends javax.swing.JFrame {
         // Variables declaration - do not modify                     
         JMenuItem copyText = new JMenuItem();
         JMenuItem pasteText = new JMenuItem();
+        JMenu connectionInfo = new JMenu("Connections");
+        JMenuItem showConnectionInfo = new JMenuItem("Show/Hide");
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(700, 700));
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new Dimension(700, 700));
         setLocation(505, 0);
         setResizable(false);
 
@@ -179,6 +196,19 @@ public class NotePadGUI extends javax.swing.JFrame {
         menu.add(pasteText);
 
         jMenuBar1.add(menu);
+        
+        showConnectionInfo.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				ConnectionInfo.getInstance().setVisible(!ConnectionInfo.getInstance().isVisible());
+			}
+		});
+        
+        connectionInfo.add(showConnectionInfo);
+        
+        jMenuBar1.add(connectionInfo);
 
         setJMenuBar(jMenuBar1);
 
@@ -201,7 +231,7 @@ public class NotePadGUI extends javax.swing.JFrame {
     private void exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitActionPerformed
         // TODO add your handling code here:
 
-//        System.exit(0);
+        System.exit(0);
     }//GEN-LAST:event_exitActionPerformed
 
     private void newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileActionPerformed
@@ -321,7 +351,7 @@ public class NotePadGUI extends javax.swing.JFrame {
      * @param changedPosition the position that operation conducted
      * @param operationType the operation type
      */
-    public static void updateEditor(String str, int changedPosition, OperationType operationType){
+    public void updateEditor(String str, int changedPosition, OperationType operationType){
         isFromOthers = true;
         textArea.setText(str);
         adjustCursorPosition(changedPosition,operationType);
@@ -332,7 +362,7 @@ public class NotePadGUI extends javax.swing.JFrame {
     /**
      * check if the cursorPosition has been set to some value that's out of boundary
      */
-    private static void outOfBoundaryCheck(){
+    private void outOfBoundaryCheck(){
         int totalLength = textArea.getText().length();
         // make sure the cursorPosition doesn't go beyond boundary
         cursorPosition = cursorPosition < 0 ? 0 : cursorPosition;
@@ -344,7 +374,7 @@ public class NotePadGUI extends javax.swing.JFrame {
      * @param changedPosition   for insert, it means the position before inserting; for delete, it means the position after deleting
      * @param operationType     the operation type
      */
-    private static void adjustCursorPosition(int changedPosition, OperationType operationType){
+    private void adjustCursorPosition(int changedPosition, OperationType operationType){
 //        changedPosition meaning:
 
 //        cursorPosition = textArea.getCaretPosition();
@@ -373,7 +403,7 @@ public class NotePadGUI extends javax.swing.JFrame {
     /**
      * @param curPosition the cursor position about to be updated to
      */
-    private static void updateCursorPosition(int curPosition){
+    private void updateCursorPosition(int curPosition){
         cursorPosition = curPosition;
         outOfBoundaryCheck();
     }
@@ -381,14 +411,14 @@ public class NotePadGUI extends javax.swing.JFrame {
     /**
      * set the cursor to a certain posiiton in the GUI
      */
-    private static void setCursorPosition(){
+    private void setCursorPosition(){
         textArea.setCaretPosition(cursorPosition);
     }
 
     /**
      * @param crdt holds the data in a doctree structure
      */
-    public static void init(Crdt crdt) {
+    public void init(Crdt crdt) {
         data = crdt;
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -411,11 +441,15 @@ public class NotePadGUI extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> setupGUI());
     }
 
-    private static void setupGUI(){
+    private void setupGUI(){
         instance = new NotePadGUI();
-        instance.setVisible(false);
+        instance.setVisible(true);
     }
 
-    private static javax.swing.JTextArea textArea;
+	public JTextArea getTextArea() {
+		return textArea;
+	}
+
+    
     // End of variables declaration                   
 }

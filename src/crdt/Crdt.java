@@ -104,7 +104,7 @@ public class Crdt implements ICrdt {
 
     @Override
     public void updateEditor(int changedPosition, OperationType operationType) {
-        NotePadGUI.updateEditor(doc.toString(), changedPosition, operationType);
+        NotePadGUI.getInstance().updateEditor(doc.toString(), changedPosition, operationType);
 //        System.out.println(doc.toString());
     }
 }
