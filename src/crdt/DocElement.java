@@ -7,10 +7,20 @@ public class DocElement implements IElement, Serializable {
     private TreePath path;
     private char symbol;
     private Timestamp timestamp;
+    private String pathString;
+
 
     public DocElement(char symbol) {
         this.symbol = symbol;
         timestamp = Timestamp.valueOf(LocalDateTime.now());
+    }
+
+    public String getPathString() {
+        return pathString;
+    }
+
+    public void setPathString(String pathString) {
+        this.pathString = pathString;
     }
 
     public Timestamp getTimestamp() {

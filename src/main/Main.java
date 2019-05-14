@@ -7,6 +7,7 @@ import GUI.NotePadGUI;
 import crdt.Crdt;
 import network.*;
 import server.Server;
+import tests.PathTests;
 
 public class Main {
 	private static Client client;
