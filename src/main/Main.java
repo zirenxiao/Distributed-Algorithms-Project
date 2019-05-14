@@ -7,6 +7,7 @@ import GUI.NotePadGUI;
 import crdt.Crdt;
 import network.*;
 import server.Server;
+import tests.PathTests;
 
 public class Main {
 	private static Client client;
@@ -19,7 +20,8 @@ public class Main {
 		System.setProperty("certPath", "certificates/cert.pem");
 		System.setProperty("pkPath", "certificates/key.pem");
 		processArgs(args);
-//		CrdtTests.testGetNodePosition();
+
+//		PathTests.testPathToString();
 	}
 	
 	private static void processArgs(String[] args) {

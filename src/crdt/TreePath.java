@@ -15,6 +15,17 @@ public class TreePath implements Serializable{
         currentReadPosition = 0;
     }
 
+    public TreePath(String path) {
+        this();
+        for (char d: path.toCharArray()) {
+            if (d == 'r') {
+                addStep(Direction.right);
+            } else if (d == 'l') {
+                addStep(Direction.left);
+            }
+        }
+    }
+
     public void addStep(Direction d) {
         if (d == Direction.left) {
             path.set(currentWritePosition, false);
@@ -52,11 +63,13 @@ public class TreePath implements Serializable{
         for (int i = 0; i < length(); i++) {
             boolean step = path.get(i);
             if (step) {
-                str.append(Direction.right);
-                str.append(" ");
+                str.append('r');
+//                str.append(Direction.right);
+//                str.append(" ");
             } else {
-                str.append(Direction.left);
-                str.append(" ");
+                str.append('l');
+//                str.append(Direction.left);
+//                str.append(" ");
             }
         }
         return str.toString();

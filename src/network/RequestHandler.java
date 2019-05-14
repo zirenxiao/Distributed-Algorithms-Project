@@ -40,7 +40,7 @@ public class RequestHandler {
 	}
 	
 	private Object fromString(String s){
-		byte [] data = Base64.getDecoder().decode(s);
+		byte [] data = Base64.getMimeDecoder().decode(s);
 		ObjectInputStream ois;
 		try {
 			ois = new ObjectInputStream(new ByteArrayInputStream(data));
