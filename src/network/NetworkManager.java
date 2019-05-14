@@ -36,7 +36,7 @@ public class NetworkManager implements ICommunicationManager {
 		
 		RequestHandler rh = new RequestHandler(r.toJSONString());
 		
-		System.out.println("Sending:"+r.toJSONString());
+//		System.out.println("Sending:"+r.toJSONString());
 		
 		// to server
 		toClients(rh.getMsg());

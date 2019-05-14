@@ -58,7 +58,7 @@ public class ConnectionInfo{
 	
 	private void createMainWindow() {
 		main.setTitle("Connection Infomation");
-		main.setVisible(true);
+//		main.setVisible(true);
 		main.setSize(500, 350);
 //        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }

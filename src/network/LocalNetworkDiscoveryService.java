@@ -13,6 +13,7 @@ public class LocalNetworkDiscoveryService extends Thread {
     public LocalNetworkDiscoveryService() {
         try {
 			socket = new DatagramSocket(Integer.parseInt(System.getProperty("broadcastPort")));
+			start();
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Port "+System.getProperty("broadcastPort") + " is in use. Local Network Discovery Service disabled.");

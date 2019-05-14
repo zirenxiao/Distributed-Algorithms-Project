@@ -39,8 +39,8 @@ public class Main {
 		client = new Client();
 		
 		// broadcast send && receive service
-		new LocalNetworkDiscoveryService().start();
-		new LocalNetworkDiscoveryBroadcast().start();
+		new LocalNetworkDiscoveryService();
+		new LocalNetworkDiscoveryBroadcast();
 		
 		
 

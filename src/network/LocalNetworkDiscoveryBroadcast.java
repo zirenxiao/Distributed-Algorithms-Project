@@ -6,7 +6,7 @@ import java.net.*;
 public class LocalNetworkDiscoveryBroadcast extends Thread{
 	
 	public LocalNetworkDiscoveryBroadcast() {
-		
+		start();
 	}
  
     public void run() {
