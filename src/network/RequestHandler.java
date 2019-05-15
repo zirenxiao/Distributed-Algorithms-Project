@@ -8,10 +8,19 @@ import client.LagDetector;
 import main.Main;
 import server.Connection;
 
+/** Process and handle request from a JSON string
+ * @author zirenx
+ *
+ */
 public class RequestHandler {
 	
 	private Requests r;
 	
+	/** Construct the handler from a string
+	 * This will convert a string to a corresponding
+	 * request.
+	 * @param s
+	 */
 	public RequestHandler(String s) {
 		RequestType t = getJSONType(s);
 		if (t.equals(RequestType.OPERATION)) {
@@ -30,6 +39,10 @@ public class RequestHandler {
 		}
 	}
 
+	/** Get the type of the request
+	 * @param s
+	 * @return
+	 */
 	private RequestType getJSONType(String s) {
 //		System.out.println(s);
 		try {
@@ -45,6 +58,9 @@ public class RequestHandler {
 		return null;
 	}
 	
+	/** Should this request be redirect to others
+	 * @return
+	 */
 	public boolean isNotRedirect() {
 		String s = r.getType().toString();
 		for (NotRedirectType n:NotRedirectType.values()) {
@@ -56,14 +72,23 @@ public class RequestHandler {
 		return false;
 	}
 
+	/** Get the string content of this request
+	 * @return
+	 */
 	public String getMsg() {
 		return r.toJSONString();
 	}
 
+	/** Get the request
+	 * @return
+	 */
 	public Requests getRequest() {
 		return r;
 	}
 	
+	/** Handle this request
+	 * @param c
+	 */
 	public void doAction(Connection c) {
 		RequestType type = r.getType();
 		if (type == RequestType.OPERATION) {

@@ -18,12 +18,12 @@ import crdt.Operation;
 import crdt.OperationType;
 import crdt.TreePath;
 
+/** Request to modify the content of the doc
+ * @author zirenx
+ *
+ */
 public class OperationRequest implements Requests {
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2172337042578617129L;
 	private RequestType type;
 	private Operation op;
 	

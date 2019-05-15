@@ -7,12 +7,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+/** Ping request
+ * To check the lag of this client to a server
+ * @author zirenx
+ *
+ */
 public class PingRequest implements Requests {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -2887269528991652501L;
 	private RequestType type;
 	private Timestamp sendTime;
 

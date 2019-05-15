@@ -1,8 +1,10 @@
 package network;
 
-import java.io.Serializable;
-
-public enum RequestType implements Serializable{
+/** Type of the requests
+ * @author zirenx
+ *
+ */
+public enum RequestType {
     OPERATION,
     PING,
     PONG,

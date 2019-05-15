@@ -14,6 +14,8 @@ public interface ICommunicationManager {
 
     // actions when a message received
     void receiveAction(OperationRequest r);
+    
+    // send a message back the same connection
     void echoAction(String r, Connection c);
     
     public void toClients(String s);

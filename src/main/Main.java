@@ -1,13 +1,11 @@
 package main;
 
 import GUI.ConnectionInfo;
-import GUI.EntranceDialog;
 import client.Client;
 import GUI.NotePadGUI;
 import crdt.Crdt;
 import network.*;
 import server.Server;
-import tests.PathTests;
 
 public class Main {
 	private static Client client;
@@ -18,11 +16,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.setProperty("broadcastPort", "4445");
-		System.setProperty("certPath", "certificates/cert.pem");
-		System.setProperty("pkPath", "certificates/key.pem");
-//		new EntranceDialog();
 		establishConnections();
-//		CrdtTests.testGetNodePosition();
 	}
 	
 	private static void establishConnections() {

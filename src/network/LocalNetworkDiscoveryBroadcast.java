@@ -3,6 +3,11 @@ package network;
 import java.io.*;
 import java.net.*;
 
+/** Enable broadcasting host message to
+ * other peers in the same sub-network
+ * @author zirenx
+ *
+ */
 public class LocalNetworkDiscoveryBroadcast extends Thread{
 	
 	public LocalNetworkDiscoveryBroadcast() {
@@ -14,7 +19,8 @@ public class LocalNetworkDiscoveryBroadcast extends Thread{
     		try {
     			String address = InetAddress.getLocalHost().getHostAddress();
     			String port = System.getProperty("port");
-    			broadcast(address+":"+port+":", InetAddress.getByName("255.255.255.255"));
+    			broadcast(address+":"+port+":",
+    					InetAddress.getByName("255.255.255.255"));
     			sleep(5000);
     		} catch (UnknownHostException e) {
     			// TODO Auto-generated catch block
@@ -29,14 +35,22 @@ public class LocalNetworkDiscoveryBroadcast extends Thread{
     	}
     }
     
-    public void broadcast(String broadcastMessage, InetAddress address) throws IOException {
+    /** Broadcast host information to an address
+     * @param broadcastMessage
+     * @param address
+     * @throws IOException
+     */
+    public void broadcast(String broadcastMessage, InetAddress address) 
+    		throws IOException {
     	DatagramSocket socket = null;
     	socket = new DatagramSocket();
     	socket.setBroadcast(true);
     	 
     	byte[] buffer = broadcastMessage.getBytes();
     	 
-    	DatagramPacket packet = new DatagramPacket(buffer, buffer.length, address, Integer.parseInt(System.getProperty("broadcastPort")));
+    	DatagramPacket packet = new DatagramPacket(buffer, 
+    			buffer.length, address, 
+    			Integer.parseInt(System.getProperty("broadcastPort")));
     	socket.send(packet);
     	socket.close();
     }

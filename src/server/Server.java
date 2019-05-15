@@ -10,6 +10,10 @@ import java.util.ArrayList;
 
 import GUI.ConnectionInfo;
 
+/** Server
+ * @author zirenx
+ *
+ */
 public class Server extends Thread{
 	private Listener listener;
 	private ArrayList<Connection> conList;
@@ -21,12 +25,19 @@ public class Server extends Thread{
 		handler = new Handler();
 	}
 	
+	/** Actions when received a new connection
+	 * @param s
+	 */
 	public void inComingCon(Connection s) {
 		System.out.println("New connection connected.");
-		ConnectionInfo.getInstance().addClientConnection(s.getSocket().getRemoteSocketAddress().toString());
+		ConnectionInfo.getInstance().addClientConnection(
+				s.getSocket().getRemoteSocketAddress().toString());
 		conList.add(s);
 	}
 	
+    /** Broadcast to all connected clients
+     * @param str
+     */
     public void broadcastToClients(String str) {
     	broadcastToClients(str, null);
     }

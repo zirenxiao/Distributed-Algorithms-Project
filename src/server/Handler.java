@@ -5,12 +5,16 @@ import main.Main;
 import network.OperationRequest;
 import network.RequestHandler;
 
+/** A server handler to handle received messages from clients
+ * @author zirenx
+ *
+ */
 public class Handler {
 
-	public Handler() {
-		// TODO Auto-generated constructor stub
-	}
-	
+	/** Handle normal message from a client
+	 * @param msg
+	 * @param c
+	 */
 	public void handle(String msg, Connection c) {
 //		System.out.println("sv:"+msg);
     	
@@ -18,13 +22,6 @@ public class Handler {
 		
 		
 		if (!rh.isNotRedirect()) {
-//			for (Channel c: channels) {
-//	    		// first send to all connected clients (children)
-//	    		if (c != ctx.channel()) {
-//	    			// make sure don't send back to the client
-//	    			c.writeAndFlush(msg);
-//	    		}
-//	    	}
 			// Send to clients except itself
 			Main.getServer().broadcastToClients(msg, c);
 			
@@ -37,6 +34,10 @@ public class Handler {
     	rh.doAction(c);
 	}
 	
+	/** This method should be called when a new connection
+	 * is established.
+	 * @param c
+	 */
 	public void initHandle(Connection c) {
 		for (Operation o:Main.getCRDT().getDoc()) {
     		OperationRequest r = new OperationRequest(o);

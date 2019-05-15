@@ -7,18 +7,31 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import main.Main;
 
+/** The server listener, listening at a port, receive connections from 
+ * clients
+ * @author zirenx
+ *
+ */
 public class Listener extends Thread{
 	private ServerSocket serverSocket=null;
 	private boolean term = false;
 	private boolean initialized = false;
 	
+	/** Construct a listener at a random port between
+	 * 8000 and 9000. if the port was occupied, it
+	 * will try other random number.
+	 * 
+	 */
 	public Listener(){
 		
 		while (!initialized) {
-			System.setProperty("port", String.valueOf(ThreadLocalRandom.current().nextInt(8000, 9000)));
-			System.out.println("Try to listening at port "+System.getProperty("port"));
+			System.setProperty("port", 
+					String.valueOf(ThreadLocalRandom.current().nextInt(8000, 9000)));
+			System.out.println("Try to listening at port " 
+					+ System.getProperty("port"));
 			try {
-				serverSocket = new ServerSocket(Integer.parseInt(System.getProperty("port")));
+				serverSocket = 
+						new ServerSocket(Integer.parseInt(System.getProperty("port")));
 				initialized = true;
 			} catch (NumberFormatException | IOException e) {
 				initialized = false;

@@ -1,8 +1,11 @@
 package network;
 
-import java.io.Serializable;
-
-public enum NotRedirectType implements Serializable{
+/** Those types are not need to redirect to
+ * all other peers
+ * @author zirenx
+ *
+ */
+public enum NotRedirectType {
     PING,
     PONG,
     PEER

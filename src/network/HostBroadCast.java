@@ -7,6 +7,11 @@ import java.util.ArrayList;
 import GUI.ConnectionInfo;
 import main.Main;
 
+/** Keep a list of all peers in the network 
+ * and broadcast the list each 5 seconds
+ * @author zirenx
+ *
+ */
 public class HostBroadCast extends Thread{
 	
 	private ArrayList<String> list;
@@ -17,6 +22,9 @@ public class HostBroadCast extends Thread{
 		addSelf();
 	}
 	
+	/** Add self to the list
+	 * 
+	 */
 	private void addSelf() {
 		try {
 			String address = InetAddress.getLocalHost().getHostAddress();
@@ -29,6 +37,10 @@ public class HostBroadCast extends Thread{
 		
 	}
 	
+	/** Add a host to the list
+	 * in the form "host:port:"
+	 * @param s
+	 */
 	public void add(String s) {
 		if (!list.contains(s)) {
 			list.add(s);

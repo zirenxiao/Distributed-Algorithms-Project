@@ -9,21 +9,27 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import GUI.ConnectionInfo;
-import GUI.NotePadGUI;
 import main.Main;
 import network.RequestHandler;
 
 
 
+/** Connection to a server
+ * @author zirenx
+ *
+ */
 public class Connection extends Thread{
 	private DataInputStream in;
 	private DataOutputStream out;
 	private BufferedReader inreader;
 	private PrintWriter outwriter;
 	private boolean open = false;
-	private Socket socket;
 	private boolean term=false;
 	
+	/** Establish a connection to a server
+	 * @param address
+	 * @param port
+	 */
 	public Connection(String address, int port) {
 		try {
 			Socket socket = new Socket(address, port);
@@ -31,7 +37,6 @@ public class Connection extends Thread{
 		    out = new DataOutputStream(socket.getOutputStream());
 		    inreader = new BufferedReader( new InputStreamReader(in));
 		    outwriter = new PrintWriter(out, true);
-		    this.socket = socket;
 		    open = true;
 		    start();
 		    
@@ -41,7 +46,8 @@ public class Connection extends Thread{
             Main.getClient().getLagDetector().start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			ConnectionInfo.getInstance().setConnectStatus("Failed to connect the server");
+			ConnectionInfo.getInstance().setConnectStatus(
+					"Failed to connect the server");
 	    	ConnectionInfo.getInstance().setConnectEnable(true);
 	    	Main.getClient().getLagDetector().setRun(false);
 			System.err.println("Connect to server Failed:"+e);
@@ -50,11 +56,13 @@ public class Connection extends Thread{
 	}
 	
 
+	/** Keep running to receive messages
+	 *
+	 */
 	public void run() {
 		try {
 			String data;
 			while(!term && (data = inreader.readLine())!=null){
-//				term=ClientSkeleton.getInstance().process(data);
 				handle(data);
 				
 			}
@@ -66,7 +74,7 @@ public class Connection extends Thread{
 	}
 
 
-	/*
+	/**
 	 * returns true if the message was written, otherwise false
 	 */
 	public boolean writeMsg(String msg) {
@@ -78,6 +86,9 @@ public class Connection extends Thread{
 		return false;
 	}
 	
+	/** Close the connection
+	 * 
+	 */
 	public void closeCon(){
 		if(open){
 			try {
@@ -91,18 +102,7 @@ public class Connection extends Thread{
 		}
 	}
 	
-	public Socket getSocket() {
-		return socket;
-	}
-	
-	public boolean isOpen() {
-		return open;
-	}
-	
 	private void handle(String data) {
-
-		
-//		System.out.println("cl:"+data);
 		
 		RequestHandler rh = new RequestHandler(data);
 

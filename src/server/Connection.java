@@ -12,6 +12,10 @@ import main.Main;
 
 
 
+/** Information of each connection.
+ * @author zirenx
+ *
+ */
 public class Connection extends Thread {
 	private DataInputStream in;
 	private DataOutputStream out;
@@ -21,6 +25,10 @@ public class Connection extends Thread {
 	private Socket socket;
 	private boolean term=false;
 	
+	/** Construct a connection from a socket
+	 * @param socket
+	 * @throws IOException
+	 */
 	public Connection(Socket socket) throws IOException{
 		in = new DataInputStream(socket.getInputStream());
 	    out = new DataOutputStream(socket.getOutputStream());
@@ -43,6 +51,9 @@ public class Connection extends Thread {
 		return false;
 	}
 	
+	/** Close this connection
+	 * 
+	 */
 	public void closeCon(){
 		if(open){
 			try {
@@ -57,6 +68,10 @@ public class Connection extends Thread {
 	}
 	
 	
+	/** Keep running and receiving messages from this client
+	 * If connection close method is called, this will be 
+	 * terminated
+	 */
 	public void run(){
 		try {
 			String data;
@@ -71,13 +86,5 @@ public class Connection extends Thread {
 //			connectionClosed(this);
 		}
 		open=false;
-	}
-	
-	public Socket getSocket() {
-		return socket;
-	}
-	
-	public boolean isOpen() {
-		return open;
 	}
 }

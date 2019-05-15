@@ -5,18 +5,29 @@ import java.net.*;
 
 import GUI.ConnectionInfo;
 
+/** Enable receiving host message from
+ * other peers in the same sub-network
+ * @author zirenx
+ *
+ */
 public class LocalNetworkDiscoveryService extends Thread {
 	 
     private DatagramSocket socket;
     private byte[] buf = new byte[50];
  
+    /** Start the discovery service
+     * 
+     */
     public LocalNetworkDiscoveryService() {
         try {
-			socket = new DatagramSocket(Integer.parseInt(System.getProperty("broadcastPort")));
+			socket = new DatagramSocket(
+					Integer.parseInt(System.getProperty("broadcastPort")));
 			start();
 		} catch (SocketException e) {
 			// TODO Auto-generated catch block
-			System.out.println("Port "+System.getProperty("broadcastPort") + " is in use. Local Network Discovery Service disabled.");
+			System.out.println("Port "
+			+ System.getProperty("broadcastPort") + 
+			" is in use. Local Network Discovery Service disabled.");
 		}
     }
  

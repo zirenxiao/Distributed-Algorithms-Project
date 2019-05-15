@@ -10,14 +10,12 @@ import org.json.simple.parser.ParseException;
 import GUI.ConnectionInfo;
 import main.Main;
 
+/** Keep a list of all peers in the network (same doc)
+ * @author zirenx
+ *
+ */
 public class PeerListRequest implements Requests {
-	
-	
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -353216899053744457L;
 	private RequestType type;
 	private String js;
 

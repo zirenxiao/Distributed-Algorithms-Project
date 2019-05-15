@@ -4,8 +4,6 @@ import main.Main;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.InetAddress;
@@ -13,7 +11,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,9 +20,14 @@ import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 
+/** Build a GUI to show connections information
+ * such as available servers, connected peers
+ * and a panel to connect to others
+ * @author zirenx
+ *
+ */
 public class ConnectionInfo{
 	
-	private static final long serialVersionUID = 1891198530883212402L;
 	private static ConnectionInfo ci = null;
 	
 	private JPanel mainPanel;

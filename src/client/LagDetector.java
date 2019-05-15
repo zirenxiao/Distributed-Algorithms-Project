@@ -5,6 +5,10 @@ import main.Main;
 import network.PingRequest;
 import network.RequestHandler;
 
+/** Detecting lag and alive information
+ * @author zirenx
+ *
+ */
 public class LagDetector extends Thread{
 	
 	private long currentLag;
@@ -18,6 +22,10 @@ public class LagDetector extends Thread{
 		run = false;
 	}
 	
+	/** If no ping back response after 5 seconds,
+	 * the connection will be shut down
+	 *
+	 */
 	public void run() {
 		while (run) {
 			try {
@@ -38,16 +46,26 @@ public class LagDetector extends Thread{
 		
 	}
 	
+	/** Set lag information
+	 * @param t
+	 */
 	public void setCurrentLag(long t) {
 		currentLag = t / 2;
 		failCount = failCount - 1;
-		ConnectionInfo.getInstance().setConnectStatus("Current Lag: " + currentLag + "ms");
+		ConnectionInfo.getInstance().setConnectStatus(
+				"Current Lag: " + currentLag + "ms");
 	}
 	
+	/** Get lag
+	 * @return
+	 */
 	public long getLag() {
 		return currentLag;
 	}
 
+	/** Set to run the detector or not
+	 * @param run
+	 */
 	public void setRun(boolean run) {
 		this.run = run;
 	}
