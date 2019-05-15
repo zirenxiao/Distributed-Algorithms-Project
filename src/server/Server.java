@@ -8,6 +8,8 @@ package server;
 
 import java.util.ArrayList;
 
+import GUI.ConnectionInfo;
+
 public class Server extends Thread{
 	private Listener listener;
 	private ArrayList<Connection> conList;
@@ -21,6 +23,7 @@ public class Server extends Thread{
 	
 	public void inComingCon(Connection s) {
 		System.out.println("New connection connected.");
+		ConnectionInfo.getInstance().addClientConnection(s.getSocket().getRemoteSocketAddress().toString());
 		conList.add(s);
 	}
 	

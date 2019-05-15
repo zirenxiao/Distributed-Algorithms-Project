@@ -42,17 +42,17 @@ public class HostBroadCast extends Thread{
 	}
 	
 	public void run() {
-//		while (true) {
-//			try {
-//				sleep(5000);
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			PeerListRequest p = new PeerListRequest(list);
-//			Main.getCommunicationManager().toClients(p.toJSONString());
-//			Main.getCommunicationManager().toServer(p.toJSONString());
-//		}
+		while (true) {
+			try {
+				sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			PeerListRequest p = new PeerListRequest(list);
+			Main.getCommunicationManager().toClients(p.toJSONString());
+			Main.getCommunicationManager().toServer(p.toJSONString());
+		}
 		
 	}
 
