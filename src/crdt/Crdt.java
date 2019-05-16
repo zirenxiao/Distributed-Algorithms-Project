@@ -5,6 +5,9 @@ import network.ICommunicationManager;
 
 import java.util.ArrayList;
 
+/***
+ * Class Crdt updates local data structure DocTree
+ */
 public class Crdt implements ICrdt {
     private DocTree doc;
     private ICommunicationManager comm;
@@ -44,6 +47,11 @@ public class Crdt implements ICrdt {
         broadcastUpdate(operation, node);
     }
 
+    /***
+     * Method broadcastUpdate() send update messages to other peers
+     * @param type
+     * @param node
+     */
     private void broadcastUpdate(OperationType type, INode node) {
         if (node == null) {
             return;
@@ -57,6 +65,7 @@ public class Crdt implements ICrdt {
 
     /**
      * Method sync() is used to update local DocTree by messages from remote peers
+     * @param operation - Operation which was performed
      * */
     @Override
     public void sync(Operation operation) {
@@ -81,6 +90,10 @@ public class Crdt implements ICrdt {
         updateEditor(position, operation.getType());
     }
 
+    /***
+     * Method serDoc() can be used to perform operations
+     * @param operations - array of Operations
+     */
     public void setDoc(ArrayList<Operation> operations) {
         if (operations == null) {
             return;
@@ -90,6 +103,10 @@ public class Crdt implements ICrdt {
         }
     }
 
+    /***
+     * Method getDoc() can be used to get whole document as an array of Operations
+     * @return
+     */
     @Override
     public ArrayList<Operation> getDoc() {
         ArrayList<Operation> operations = new ArrayList<>();
@@ -103,12 +120,20 @@ public class Crdt implements ICrdt {
         return operations;
     }
 
+    /***
+     * Method updateEditor() updates user editor area according to underlying DocTree
+     * this method is called when operation performed
+     * @param changedPosition - position of the changed element in the editor area,
+     * @param operationType - type of operation (remove or insert)
+     */
     @Override
     public void updateEditor(int changedPosition, OperationType operationType) {
         NotePadGUI.getInstance().updateEditor(doc.toString(), changedPosition, operationType);
-//        System.out.println(doc.toString());
     }
 
+    /***
+     * Method clear is used to clear document.
+     */
     public void clear() {
         doc = new DocTree();
     }

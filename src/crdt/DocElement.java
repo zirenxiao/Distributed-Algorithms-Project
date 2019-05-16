@@ -3,25 +3,22 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
+/***
+ * Objects of DocElement class are stored in the DocTree nodes.
+ * DocElement contains one symbol and timestamp when it was created
+ * DocElement is the object which have to be sent to other peers.
+ * For this purpose it keeps a path to the node which it is stored in.
+ */
 public class DocElement implements IElement, Serializable {
     private TreePath path;
     private char symbol;
     private Timestamp timestamp;
-//    private String pathString;
 
 
     public DocElement(char symbol) {
         this.symbol = symbol;
         timestamp = Timestamp.valueOf(LocalDateTime.now());
     }
-//
-//    public String getPathString() {
-//        return pathString;
-//    }
-//
-//    public void setPathString(String pathString) {
-//        this.pathString = pathString;
-//    }
 
     public Timestamp getTimestamp() {
         return timestamp;
@@ -42,12 +39,16 @@ public class DocElement implements IElement, Serializable {
         return symbol;
     }
 
+    /***
+     * Method isHappenedEarlier defines which of two DocElements was created first
+     * @param that
+     * @return
+     */
     public boolean isHappenedEarlier(IElement that) {
         return this.getTimestamp().compareTo(that.getTimestamp()) < 0;
     }
 
     public String toString() {
-//        return String.valueOf(symbol);
         return String.format("Value: '%s', Timestamp: %s", symbol, timestamp.toString());
     }
 

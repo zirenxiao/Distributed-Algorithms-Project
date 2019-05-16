@@ -1,6 +1,10 @@
 package crdt;
 
-
+/***
+ * Class DocNode describes a node of DocTree
+ * Each DocNode can keep one DocElement or be empty
+ * If symbol is removed, DocNode is marked as removed
+ */
 public class DocNode implements INode {
     private DocElement element;
     private DocNode leftChild;
@@ -47,7 +51,6 @@ public class DocNode implements INode {
         return node;
     }
 
-
     @Override
     public void setRightChild(INode node) {
         this.rightChild = (DocNode)node;
@@ -81,12 +84,21 @@ public class DocNode implements INode {
         }
     }
 
+    /***
+     * Method getPathToRoot() returns the path from root to this node
+     * @return TreePath object
+     */
     private TreePath getPathToRoot() {
         TreePath path = new TreePath();
         getPathToParent(path);
         return path;
     }
 
+    /***
+     * Method getPathToParent() return the path which should be taken from
+     * parent of this node to reach this node (right or left)
+     * @param path
+     */
     private void getPathToParent(TreePath path) {
         if (parent != null) {
             parent.getPathToParent(path);
