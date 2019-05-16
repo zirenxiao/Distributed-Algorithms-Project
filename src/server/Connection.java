@@ -87,4 +87,9 @@ public class Connection extends Thread {
 		}
 		open=false;
 	}
+
+	public Socket getSocket() {
+		// TODO Auto-generated method stub
+		return socket;
+	}
 }
