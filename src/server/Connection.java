@@ -87,4 +87,8 @@ public class Connection extends Thread {
 		}
 		open=false;
 	}
+
+	public Socket getSocket() {
+		return socket;
+	}
 }

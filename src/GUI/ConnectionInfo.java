@@ -121,6 +121,8 @@ public class ConnectionInfo{
 			}
 //			setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		}
+		NotePadGUI.getInstance().cleanDoc();
+//		Main.getCRDT().
 		Main.getClient().connectTo(address, port);
 	}
 	
