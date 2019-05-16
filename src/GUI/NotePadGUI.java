@@ -425,6 +425,7 @@ public class NotePadGUI extends JFrame {
      * Clean the current textArea
      */
 	public void cleanDoc(){
+	    isFromOthers = false;
         instance.textArea.setText("");
     }
     
