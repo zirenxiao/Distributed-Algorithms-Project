@@ -51,7 +51,7 @@ public class NotePadGUI extends JFrame {
     private static NotePadGUI instance = null;
     private JTextArea textArea;
 
-    public NotePadGUI() {
+    private NotePadGUI() {
         initComponents();
 //        setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
     }
@@ -111,9 +111,8 @@ public class NotePadGUI extends JFrame {
         textArea.addCaretListener(e -> {
             JTextArea editArea = (JTextArea)e.getSource();
             try {
-                int caretpos = editArea.getCaretPosition();
-//                System.out.println("cursor position changed: " + caretpos);
-                cursorPosition = caretpos;
+                //                System.out.println("cursor position changed: " + caretpos);
+                cursorPosition = editArea.getCaretPosition();
             }
             catch(Exception ex) {
                 System.out.println("something happens with addCaretListener()");
@@ -197,14 +196,10 @@ public class NotePadGUI extends JFrame {
 
         jMenuBar1.add(menu);
         
-        showConnectionInfo.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				ConnectionInfo.getInstance().setVisible(!ConnectionInfo.getInstance().isVisible());
-			}
-		});
+        showConnectionInfo.addActionListener(e -> {
+            // TODO Auto-generated method stub
+            ConnectionInfo.getInstance().setVisible(!ConnectionInfo.getInstance().isVisible());
+        });
         
         connectionInfo.add(showConnectionInfo);
         
@@ -350,13 +345,13 @@ public class NotePadGUI extends JFrame {
 
         switch(operationType){
             case insert:
-                System.out.println("inserted a char at: "+changedPosition);
+//                System.out.println("inserted a char at: "+changedPosition);
                 if(changedPosition < cursorPosition){
                     cursorPosition++;
                 }
                 break;
             case remove:
-                System.out.println("deleted a char at: "+(changedPosition));
+//                System.out.println("deleted a char at: "+(changedPosition));
                 if(changedPosition < cursorPosition){
                     cursorPosition--;
                 }
@@ -406,7 +401,7 @@ public class NotePadGUI extends JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> setupGUI());
+        java.awt.EventQueue.invokeLater(this::setupGUI);
     }
 
     /**
@@ -417,14 +412,10 @@ public class NotePadGUI extends JFrame {
         instance.setVisible(true);
     }
 
-//	public JTextArea getTextArea() {
-//		return textArea;
-//	}
-
     /**
      * Clean the current textArea
      */
-	public void cleanDoc(){
+    void cleanDoc(){
 	    isFromOthers = false;
         instance.textArea.setText("");
     }
