@@ -234,39 +234,6 @@ public class NotePadGUI extends JFrame {
         System.exit(0);
     }//GEN-LAST:event_exitActionPerformed
 
-    private void newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newFileActionPerformed
-        // TODO add your handling code here:
-        /*textArea.setText("");
-        setTitle(""); */
-    }//GEN-LAST:event_newFileActionPerformed
-
-    private void openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileActionPerformed
-        // TODO add your handling code here:
-        /* FileDialog fileDialog = new FileDialog(NotePadGUI.this,"Open File", FileDialog.LOAD);
-        fileDialog.setVisible(true);
-
-        if (fileDialog.getFile() != null) {
-            fileName = fileDialog.getDirectory() + fileDialog.getFile();
-            setTitle(fileName);
-        }
-
-        try{
-            BufferedReader reader = new BufferedReader(new FileReader(fileName));
-
-            StringBuilder sb = new StringBuilder();
-
-            String line;
-
-            while ((line = reader.readLine()) != null) {
-                sb.append(line).append("\n");
-                textArea.setText(sb.toString());
-            }
-            reader.close();
-        } catch (IOException e){
-            System.out.println("File not found or corrupted");
-        } */
-    }//GEN-LAST:event_openFileActionPerformed
-
     private void saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveFileActionPerformed
         // TODO add your handling code here:
 
@@ -416,6 +383,7 @@ public class NotePadGUI extends JFrame {
     }
 
     /**
+     * Initialise the Note Pad and Create the GUI
      * @param crdt holds the data in a doctree structure
      */
     public void init(Crdt crdt) {
@@ -441,15 +409,24 @@ public class NotePadGUI extends JFrame {
         java.awt.EventQueue.invokeLater(() -> setupGUI());
     }
 
+    /**
+     * Set up a new Note Pad GUI and make it visible
+     */
     private void setupGUI(){
         instance = new NotePadGUI();
         instance.setVisible(true);
     }
 
-	public JTextArea getTextArea() {
-		return textArea;
-	}
+//	public JTextArea getTextArea() {
+//		return textArea;
+//	}
 
+    /**
+     * Clean the current textArea
+     */
+	public void cleanDoc(){
+        instance.textArea.setText("");
+    }
     
     // End of variables declaration                   
 }
