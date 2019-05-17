@@ -71,6 +71,7 @@ public class Server extends Thread{
 	
 	public void removeFromList(Connection con) {
 		conList.remove(con);
+		con.closeCon();
 		ConnectionInfo.getInstance().delClientConnection(
 				con.getSocket().getRemoteSocketAddress().toString());
 	}
