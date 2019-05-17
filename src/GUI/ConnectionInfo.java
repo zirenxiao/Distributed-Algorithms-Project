@@ -101,14 +101,10 @@ public class ConnectionInfo{
 		mannualConnect.add(connect);
 		
 		disconnect = new JButton("Disconnect");
-		disconnect.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				Main.getClient().closeConnection();
-			}
-			
+		disconnect.setEnabled(false);
+		disconnect.addActionListener(e -> {
+			// TODO Auto-generated method stub
+			Main.getClient().closeConnection();
 		});
 		mannualConnect.add(disconnect);
 		connect.addActionListener(e -> connectTo(serverAddress.getText(), serverPort.getText()));

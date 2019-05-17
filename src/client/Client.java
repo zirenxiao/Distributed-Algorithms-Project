@@ -42,6 +42,10 @@ public class Client {
 	 * 
 	 */
 	public void closeConnection() {
+		if(this.con==null || !this.con.isAlive()){
+			ConnectionInfo.getInstance().setConnectStatus("Nothing to Closed.");
+			return;
+		}
 		this.con.closeCon();
 		ConnectionInfo.getInstance().setConnectStatus("Connection Closed.");
     	ConnectionInfo.getInstance().setConnectEnable(true);
