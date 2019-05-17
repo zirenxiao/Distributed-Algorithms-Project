@@ -1,0 +1,2 @@
+# Client
+A peer can be client to connect to other peers, using TCP connections. It sends keep-alive messages periodically to detect lag and network condition. If there is no response in 5 seconds, the connection will be closed.

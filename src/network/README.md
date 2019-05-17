@@ -1,0 +1,2 @@
+# Network
+The network package provides an interface of communication between peers. The message sending process is managed by a message queue, where requests will be processed sequentially. It also broadcast periodically host information. 
