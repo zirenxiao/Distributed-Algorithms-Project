@@ -108,4 +108,8 @@ public class Crdt implements ICrdt {
         NotePadGUI.getInstance().updateEditor(doc.toString(), changedPosition, operationType);
 //        System.out.println(doc.toString());
     }
+
+    public void clear() {
+        doc = new DocTree();
+    }
 }

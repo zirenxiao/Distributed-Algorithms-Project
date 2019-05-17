@@ -42,6 +42,7 @@ public class Connection extends Thread{
 		    
 		    ConnectionInfo.getInstance().setConnectEnable(false);
             ConnectionInfo.getInstance().setConnectStatus("Connected");
+            ConnectionInfo.getInstance().setDisconnectEnable(true);
             Main.getClient().getLagDetector().setRun(true);
             Main.getClient().getLagDetector().start();
 		} catch (IOException e) {

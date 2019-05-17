@@ -4,6 +4,8 @@ import main.Main;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.InetAddress;
@@ -35,6 +37,7 @@ public class ConnectionInfo{
 	private DefaultTableModel availableConnection;
 	private JLabel connectStatus;
 	private JButton connect;
+	private JButton disconnect;
 	private JTextField serverAddress;
 	private JTextField serverPort;
 	private JFrame main;
@@ -96,6 +99,18 @@ public class ConnectionInfo{
 		mannualConnect.add(new JLabel("Port"));
 		mannualConnect.add(serverPort);
 		mannualConnect.add(connect);
+		
+		disconnect = new JButton("Disconnect");
+		disconnect.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				Main.getClient().closeConnection();
+			}
+			
+		});
+		mannualConnect.add(disconnect);
 		connect.addActionListener(e -> connectTo(serverAddress.getText(), serverPort.getText()));
 		
 		connectToServer.add(mannualConnect);
@@ -112,7 +127,6 @@ public class ConnectionInfo{
 	}
 	
 	private void connectTo(String address, String port) {
-		NotePadGUI.getInstance().setVisible(true);
 		// avoid connect to self
 		if (getSelfAddress().contains(address)) {
 			if (port.equals(System.getProperty("port"))) {
@@ -121,6 +135,8 @@ public class ConnectionInfo{
 			}
 //			setDefaultCloseOperation(WindowConstants.HIDE_ON_CLOSE);
 		}
+		NotePadGUI.getInstance().cleanDoc();
+		Main.getCRDT().clear();
 		Main.getClient().connectTo(address, port);
 	}
 	
@@ -239,5 +255,9 @@ public class ConnectionInfo{
 	public boolean isVisible() {
 		// TODO Auto-generated method stub
 		return main.isVisible();
+	}
+	
+	public void setDisconnectEnable(boolean enable) {
+		this.disconnect.setEnabled(enable);
 	}
 }
