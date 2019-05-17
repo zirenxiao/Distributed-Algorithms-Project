@@ -1,8 +1,6 @@
 package crdt;
 
-import java.io.Serializable;
-
-public enum OperationType implements Serializable {
+public enum OperationType {
     insert,
     remove,
 }

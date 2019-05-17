@@ -1,5 +1,4 @@
 package crdt;
-import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
@@ -9,7 +8,7 @@ import java.time.LocalDateTime;
  * DocElement is the object which have to be sent to other peers.
  * For this purpose it keeps a path to the node which it is stored in.
  */
-public class DocElement implements IElement, Serializable {
+public class DocElement implements IElement {
     private TreePath path;
     private char symbol;
     private Timestamp timestamp;

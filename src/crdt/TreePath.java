@@ -1,5 +1,5 @@
 package crdt;
-import java.io.Serializable;
+
 import java.util.BitSet;
 
 /***
@@ -10,9 +10,8 @@ import java.util.BitSet;
  * Path has two possible directions (right and left) at each step
  * Each step is the level of the tree
  */
-public class TreePath implements Serializable{
+public class TreePath {
 
-	private static final long serialVersionUID = 1637333504913968048L;
 	public BitSet path;
     int currentWritePosition;
     int currentReadPosition;
