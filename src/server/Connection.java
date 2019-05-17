@@ -62,7 +62,7 @@ public class Connection extends Thread {
 				out.close();
 			} catch (IOException e) {
 				// already closed?
-				
+				Main.getServer().removeFromList(this);
 			}
 		}
 	}

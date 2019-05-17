@@ -66,6 +66,11 @@ public class Server extends Thread{
 	public void disconnectAllClients() {
 		for (int i=0; i<conList.size(); i++) {
 			conList.get(i).closeCon();
+			conList.remove(i);
 		}
+	}
+	
+	public void removeFromList(Connection con) {
+		conList.remove(con);
 	}
 }
