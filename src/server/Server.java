@@ -60,4 +60,12 @@ public class Server extends Thread{
 		return handler;
 	}
     
+	/** Disconnect all clients
+	 * 
+	 */
+	public void disconnectAllClients() {
+		for (int i=0; i<conList.size(); i++) {
+			conList.get(i).closeCon();
+		}
+	}
 }
