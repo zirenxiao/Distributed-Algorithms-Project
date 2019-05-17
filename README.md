@@ -1,5 +1,48 @@
-# Distributed Algorithms Project 2019 SM1
-## Coding criteria
-Code quality, application logic, distributed algorithm and difficulty of the implemented algorithm. The weighting is 3/4/4/4 respectively.
-## Description
-Implementation details are the choice of the students. The purpose of the implementation is to demonstrate that you have implemented the chosen algorithm(s) in a realistic setting. The setting should be of the nature of a multi-player computer game where different users can provide independently input. However, you are free to choose whatever you like for your application. For example, you could be demonstrating things such as deadlock resolution or event ordering if you chose one of these topics. The graphics of the application is not the focus of the implementation although good graphics always help with presentations. The main focus of the implementations is the experiment with the chosen algorithm(s). Some part of the implementation, such as graphics components, can use libraries built by companies but the chosen algorithm(s) should be done solely by the efforts of the team. Teams should consider topics they like and have a feeling on what they will show in the demo. Students could contemplate picking a topic early in the semester. A quick search on Google and a quick look at the textbook will give an idea about the topic. Students are encouraged to discuss possible topics with the lecturer. At the start of the semester students are not expected to know the details of their topics, but they should have an interest in studying it.
+# Summary of the Implementation:
+
+It is a collaborative text editor application.
+In general, when the application is launched, and the user is not connected to anyone,
+it acts as a simple notepad editor, where user can type things and also save the file. 
+When it connects to a peer, it can see the collaborative contents on the editor for all connected peers,
+and can also write things in the editor, which is reflected to all other peers' UIs.
+
+# GUI Package:
+
+This package mainly handles the user interfaces, which is our editor, and the connection information UI. 
+In the editor, we can collaboratively write contents, and save it.
+The connection information UI is used to connect/disconnect to/from other peers. 
+All the necessary codes for them are handled inside GUI Package. 
+
+# client Package
+
+A peer can be a client to connect to other peers, using TCP connections. 
+It sends keep-alive messages periodically to detect lag and network condition. 
+If there is no response in 5 seconds, the connection will be closed.
+All the necessary codes for them are handled inside this client Package.
+
+# crdt Package:
+
+This CRDT implementation is based on Binary Tree data type. For synchronisation it uses operation-based model.
+Atom operation is sending DocElement and Operation Type. 
+There are two types of opreations: insert and remove. All operations are indempotent.
+Datastamps, which are created, when DocElement(s) are created, are used to solve conflicts between concurrent operations. 
+All CRDT classes and their implementations are in the Crdt package.
+
+# main Package:
+It is just used to run the application
+
+# network Package:
+
+The network package provides an interface for communication between peers. 
+The message sending process is managed by a message queue, where requests will be processed sequentially. 
+It also periodically broadcasts host information.
+All the necessary codes for them are handled inside this network Package.
+
+# server Package:
+
+A peer can be a server to receive and handle request from other peers. 
+The server will listen at a random port between 8000 to 9000.
+All the necessary codes for them are handled inside this server Package.
+
+# tests Package:
+It was used to do some necessary testings for crdt implementation.
