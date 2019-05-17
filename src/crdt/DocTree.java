@@ -2,7 +2,11 @@ package crdt;
 
 import java.util.ArrayList;
 
-
+/***
+ * Auxiliary class to traverse the node
+ * Contains current position in the tree
+ * and position at which traversal should be stopped
+ */
 class P {
     int stop;
     int current;
@@ -13,10 +17,18 @@ class P {
     }
 }
 
-
+/***
+ * class DocTree describes underlying Data Type of CRDT
+ */
 public class DocTree implements ITree {
     DocNode root;
 
+    /***
+     * Method addNode() adds a Node in the DocTree according to the path containing in the DocElement
+     * @param element
+     * @return
+     * @throws Exception
+     */
     public int addNode(DocElement element) throws Exception {
         return addNode(element, false);
     }
@@ -45,6 +57,11 @@ public class DocTree implements ITree {
         return findNodePosition(node);
     }
 
+    /***
+     * Method findNodePosition() returns the node position in the linear order after tree traversal
+     * @param node
+     * @return
+     */
     private int findNodePosition(INode node) {
         ArrayList<INode> nodes = new ArrayList();
         inorderTraverse(root, new P(-1), nodes, null);
@@ -52,48 +69,33 @@ public class DocTree implements ITree {
         return nodes.indexOf(node);
     }
 
+    /***
+     * Method solveConflict() defines the place of two DocElements
+     * when they were created at one place simultaneously
+     * @param node
+     * @param element
+     */
     private void solveConflict(INode node, IElement element) {
         DocElement firstElement  = (DocElement) element;
         DocElement secondElement = (DocElement) node.getElement();
-        //INode rightChild = null;
         if (secondElement.isHappenedEarlier(firstElement)) {
             // swap
             node.setElement(firstElement);
             firstElement = secondElement;
-            //rightChild = node.takeRightChild();
         }
         INode leftChild = node.getLeftChild();
         if (leftChild == null) {
-            leftChild = createNode(firstElement, node, Direction.left);
+            createNode(firstElement, node, Direction.left);
         } else {
             solveConflict(leftChild, firstElement);
         }
-//        if (rightChild != null) {
-//            leftChild.setRightChild(rightChild);
-//            updatePathForElements(rightChild);
-//        }
     }
 
-    private void updatePathForElements(INode node) {
-        if (node == null)
-            return;
-        node.updateElementPath();
-        updatePathForElements(node.getLeftChild());
-        updatePathForElements(node.getRightChild());
-    }
-
-    private void swap(INode node, IElement secondElement) {
-        IElement firstElement = node.getElement();
-        node.setElement(secondElement);
-        INode leftChild = node.getLeftChild();
-        if (leftChild == null) {
-            createNode((DocElement) firstElement, node, Direction.left);
-        } else {
-            solveConflict(leftChild, firstElement);
-        }
-
-    }
-
+    /***
+     * Method searchNode() returns the node according to the path
+     * @param path
+     * @return
+     */
     private INode searchNode(TreePath path) {
         if (path == null) {
             if (root == null) {
@@ -142,6 +144,11 @@ public class DocTree implements ITree {
         return searchNode(path);
     }
 
+    /***
+     * Method traverseTreeUntilPosition() performs the tree traversal until the position
+     * @param position - position of the symbol in the user editor area
+     * @return array of Nodes
+     */
     private ArrayList<INode> traverseTreeUntilPosition(int position) {
         ArrayList<INode> nodes = new ArrayList();
         inorderTraverse(root, new P(position), nodes, null);
@@ -153,6 +160,15 @@ public class DocTree implements ITree {
         return nodes.get(nodes.size()-1);
     }
 
+    /***
+     * Method inorderTraverse() perform inorder tree traversal
+     * @param currentNode - node to start traversal
+     * @param positions - object containing current position in the tree and
+     *                  the position at which traversal should be stopped
+     * @param visibleNodes - returns only nodes which weren't removed
+     * @param allNodes -  returns all traversed nodes
+     * @return
+     */
     private static boolean inorderTraverse(INode currentNode,
                                            P positions,
                                            ArrayList<INode> visibleNodes,
@@ -177,6 +193,13 @@ public class DocTree implements ITree {
         return false;
     }
 
+    /***
+     * Method creates a DocNode and DocElement based on symbol and its position in the editor area
+     * Method is used to add changes from local user editor
+     * @param symbol
+     * @param position
+     * @return
+     */
     @Override
     public INode addSymbol(char symbol, int position) {
         DocElement el = new DocElement(symbol);
@@ -215,6 +238,15 @@ public class DocTree implements ITree {
         return null;
     }
 
+    /***
+     * Method marks the node as removed according to the position
+     * Symbol is used for additional check if the node is correct.
+     * Method is used to apply changes from local user editor.
+     * @param symbol
+     * @param position
+     * @return
+     * @throws Exception
+     */
     @Override
     public INode removeSymbol(char symbol, int position) throws Exception {
         if (position == 0)
@@ -230,6 +262,13 @@ public class DocTree implements ITree {
         return node;
     }
 
+    /***
+     * Method marks the node as removed according to the path containing in the DocElement object
+     * Method is used to apply changes from received messages
+     * @param element
+     * @return
+     * @throws Exception
+     */
     public int removeNode(DocElement element) throws Exception {
         int position = -1;
         if (element == null) {
@@ -238,7 +277,9 @@ public class DocTree implements ITree {
         INode node = searchNode(element.getPath());
         if (!node.isEmpty()) {
             if (element.getValue() != node.getElement().getValue()) {
-                throw new Exception(String.format("Symbols in the received element '%s' and in the stored element '%s' don't match", element.getValue(), node.getElement().getValue()));
+                throw new Exception(String.format("Symbols in the received element '%s' and in the stored element '%s' don't match",
+                                    element.getValue(),
+                                    node.getElement().getValue()));
             }
             position = findNodePosition(node);
             node.remove();
@@ -260,6 +301,10 @@ public class DocTree implements ITree {
         return str.toString();
     }
 
+    /***
+     * Method returns the whole document as an array of nodes
+     * @return
+     */
     public ArrayList<INode> getDoc() {
         ArrayList<INode> nodes = new ArrayList();
         ArrayList<INode> allNodes = new ArrayList();

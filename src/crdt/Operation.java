@@ -2,8 +2,12 @@ package crdt;
 
 import java.io.Serializable;
 
+/***
+ * This class describes an atom operation of CRDT implementation
+ * Contains DocElement with
+ * and Operation Type which is performed with this DocElement
+ */
 public class Operation  implements Serializable{
-
 	private static final long serialVersionUID = -7479421250871856919L;
 	private OperationType type;
     private DocElement element;
@@ -11,8 +15,6 @@ public class Operation  implements Serializable{
     public Operation(OperationType type, DocElement element) {
         this.type = type;
         this.element = element;
-//        System.out.println(element.getPathString());
-//        replaceTreePathByPathSting();
     }
 
     public OperationType getType() {
@@ -20,19 +22,6 @@ public class Operation  implements Serializable{
     }
 
     public DocElement getElement() {
-//        restoreTreePath();
         return element;
     }
-//    private void replaceTreePathByPathSting() {
-//        TreePath path = element.getPath();
-//        
-//        element.setPathString(path.toString());
-//        element.setPath(null);
-//    }
-//
-//    private void restoreTreePath() {
-//        String pathStr = element.getPathString();
-//        element.setPath(new TreePath(pathStr));
-//    }
-
 }

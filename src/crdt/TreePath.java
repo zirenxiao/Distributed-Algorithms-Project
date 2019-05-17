@@ -2,6 +2,14 @@ package crdt;
 import java.io.Serializable;
 import java.util.BitSet;
 
+/***
+ * This class is used to keep the path to reach the node
+ * Usually it is the path from the root node to the particular node
+ * The root node have the null or empty path.
+ * Path is kept as bit array
+ * Path has two possible directions (right and left) at each step
+ * Each step is the level of the tree
+ */
 public class TreePath implements Serializable{
 
 	private static final long serialVersionUID = 1637333504913968048L;
@@ -37,6 +45,10 @@ public class TreePath implements Serializable{
         }
     }
 
+    /***
+     * Method getNextStep() is used to iterate the path
+     * @return
+     */
     public Direction getNextStep() {
         int length = path.length();
         if (currentReadPosition < currentWritePosition) {
@@ -54,6 +66,10 @@ public class TreePath implements Serializable{
         }
     }
 
+    /***
+     * Method returns the level of the tree at which node with this path is situated
+     * @return
+     */
     public int length() {
         return currentWritePosition;
     }
@@ -64,15 +80,10 @@ public class TreePath implements Serializable{
             boolean step = path.get(i);
             if (step) {
                 str.append('r');
-//                str.append(Direction.right);
-//                str.append(" ");
             } else {
                 str.append('l');
-//                str.append(Direction.left);
-//                str.append(" ");
             }
         }
-//        System.out.println("str:"+str.toString());
         return str.toString();
     }
 
