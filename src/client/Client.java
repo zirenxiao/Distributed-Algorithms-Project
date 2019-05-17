@@ -45,6 +45,7 @@ public class Client {
 		this.con.closeCon();
 		ConnectionInfo.getInstance().setConnectStatus("Connection Closed.");
     	ConnectionInfo.getInstance().setConnectEnable(true);
+    	ConnectionInfo.getInstance().setDisconnectEnable(false);
     	Main.getClient().getLagDetector().setRun(false);
 	}
 
