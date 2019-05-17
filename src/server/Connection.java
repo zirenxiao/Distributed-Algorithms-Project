@@ -62,7 +62,8 @@ public class Connection extends Thread {
 				out.close();
 			} catch (IOException e) {
 				// already closed?
-				Main.getServer().removeFromList(this);
+				Main.getServer().removeFromList(
+						Main.getServer().getIndex(this));
 			}
 		}
 	}
