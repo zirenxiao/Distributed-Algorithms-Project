@@ -87,8 +87,8 @@ public class ConnectionInfo{
 	private void connectToServer() {
 		serverAddress = new JTextField(10);
 		serverPort = new JTextField(5);
-		serverAddress.setText("127.0.0.1");
-		serverPort.setText("800");
+//		serverAddress.setText("127.0.0.1");
+//		serverPort.setText("800");
 		connect = new JButton("Connect");
 		JPanel connectToServer = new JPanel();
 		JPanel mannualConnect = new JPanel();

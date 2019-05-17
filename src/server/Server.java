@@ -64,13 +64,14 @@ public class Server extends Thread{
 	 * 
 	 */
 	public void disconnectAllClients() {
-		for (int i=0; i<conList.size(); i++) {
-			conList.get(i).closeCon();
-			conList.remove(i);
+		for (Connection con:conList) {
+			removeFromList(con);
 		}
 	}
 	
 	public void removeFromList(Connection con) {
 		conList.remove(con);
+		ConnectionInfo.getInstance().delClientConnection(
+				con.getSocket().getRemoteSocketAddress().toString());
 	}
 }
